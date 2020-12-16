@@ -6,6 +6,8 @@ import java.util.Date;
 
 public class Apartment {
 	
+	private enum Type {room, apartment}
+	
 	private String type;
 	private int capacity;
 	private int rooms;
