@@ -20,7 +20,7 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(String username, String password, String name, String surname, String gender, Role role, String jwt) {
+	public User(String username, String password, String name, String surname, String gender, Role role) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -28,7 +28,7 @@ public class User {
 		this.surname = surname;
 		this.gender = gender;
 		this.role = role;
-		this.jwt = jwt;
+		//this.jwt = jwt;
 	}
 	
 	public String getUsername() {
