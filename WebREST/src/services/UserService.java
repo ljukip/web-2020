@@ -36,6 +36,7 @@ public class UserService {
 		if (ctx.getAttribute("userDao") == null) {
 			String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("userDao", new UserDao(contextPath));
+			System.out.println(contextPath);
 		}
 	}
 	
@@ -48,27 +49,61 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(User user) {
-		
 		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
 		//System.out.println("radi sifra " + "" + user.getPassword());
 		User userForLogin = userDao.find(user.getUsername(), user.getPassword());
 		//System.out.println(userForLogin.getUsername() + userForLogin.getPassword());
 		//if user is found in dao then create and set a json web token upon it
 		//build responce status ok
+		System.out.println("userForLogin: " + userForLogin);
 		if (userForLogin != null) {
-			String jwtSession = Jwts.builder()
-					//we cant have two identical usernames (subject ides the jwt)
-					.setSubject(userForLogin.getUsername())
-					.setIssuedAt(new Date())
-					.setExpiration(new Date(new Date().getTime() + 1000*9000L))
-					.signWith(key)
-					.compact();
+			String jwtSession = createJwtSession(userForLogin.getUsername());
 			userForLogin.setJwt(jwtSession); //set token to the object in request
+			System.out.println("ulogovani korisnik je:"+userForLogin.getRole());
+			System.out.println("status ok");
 			return Response.status(Response.Status.OK).entity(userForLogin).build();
 		}
 
 		//if the user with the given username is not found, build responce bad request
+		System.out.println("bad request");
 		return Response.status(Response.Status.BAD_REQUEST).build();
 	}
+	public String createJwtSession(String subject) {
+		String jwtSession = Jwts.builder()
+				//we cant have two identical usernames (subject ides the jwt)
+				.setSubject(subject)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(new Date().getTime() + 1000*9000L))
+				.signWith(key)
+				.compact();
+		return jwtSession;
+	}
+	
+	@POST
+	@Path("/registration")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response registration(User user) {
+		//check if the username is unique
+		//if it is, create user, if not bad request
+		String usernameForReg=user.getUsername();
+		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+		System.out.println("username posted:" + "" + usernameForReg);
+		if (userDao==null) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		if (!userDao.find(usernameForReg)) {
+			userDao.save(user, ctx.getRealPath(""));
+			String jwtSession = createJwtSession(user.getUsername());
+			user.setJwt(jwtSession);
+			System.out.println(jwtSession);
+			return Response.status(Response.Status.OK).entity(user).build();
+		}
+		else {
+			System.out.println("username vec postoji");
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
+	
 
 }

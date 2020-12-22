@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +19,12 @@ import beans.User;
 public class UserDao {
 	
 	private List<User> users = new ArrayList<>();
+
+	Path currentDir = Paths.get(".");
+	String path=currentDir.toAbsolutePath().toString();
 	
 	public UserDao(String contextPath) {
 		read(contextPath);
-		System.out.println(contextPath);
 	}
 	
 	    public List<User> getAll() {
@@ -38,10 +42,12 @@ public class UserDao {
 	    	
 			BufferedWriter writer = null;
 			try {
-				File file = new File(contextPath + "/users.txt");
+				File file = new File(path + "/web-2020/WebRest/users.txt");
+				System.out.println("put:"+file.getAbsolutePath());
 				writer = new BufferedWriter(new FileWriter(file, true));
 				PrintWriter out = new PrintWriter(writer); //txt
 				out.println(s);
+				System.out.println("upisuje: " + s);
 				out.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -60,7 +66,7 @@ public class UserDao {
 	    public void read (String contextPath) {
 			BufferedReader in = null;
 			try {
-				File file = new File("C:\\Users\\Ljubica\\Desktop\\web-2020\\WebREST\\WebContent\\users.txt");
+				File file = new File(path + "/web-2020/WebRest/users.txt");
 				in = new BufferedReader(new FileReader(file));
 				String s;
 				StringTokenizer st;
@@ -96,8 +102,8 @@ public class UserDao {
 	    
 	    public void update(User user, String contextPath) {
 	    	try {
-	    		File file = new File(contextPath + "/users.txt");
-	    		File tempFile = new File(contextPath + "/usersTemp.txt");
+	    		File file = new File(path + "/web-2020/WebRest/users.txt");
+	    		File tempFile = new File(contextPath + "usersTemclp.txt");
 				BufferedReader in = new BufferedReader(new FileReader(file));
 				BufferedWriter writer =null;
 				writer = new BufferedWriter(new FileWriter(tempFile, true));
@@ -149,11 +155,26 @@ public class UserDao {
 	    
 	    public User find(String username, String password) {
 	    	for (User u : users) {
-	    	    if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
+	    		System.out.println("poredi:"+username + "i" + u.getUsername());
+	    		System.out.println("poredi:"+password + "i" + u.getPassword());
+	    	    if (username.equals(u.getUsername()) & password.equals(u.getPassword())) {
+	    	    	System.out.println("nasao");
 	    	    	return u;
 	    	    }
 	    	}
+	    	System.out.println("nije nasao");
 			return null;
+	    }
+	    public Boolean find(String username) {
+	    	for (User u : users) {
+	    		System.out.println("poredi:"+username + "i" + u.getUsername());
+	    	    if (username.equals(u.getUsername())) {
+	    	    	System.out.println("nasao");
+	    	    	return true;
+	    	    }
+	    	}
+	    	System.out.println("nije nasao");
+			return false;
 	    }
 
 }
