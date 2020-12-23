@@ -141,12 +141,12 @@ Vue.component("registration", {
                 return;
             }
             console.log("succes");
-            localStorage.setItem("username", data.username);
-            localStorage.setItem("password", data.password);
-            localStorage.setItem("role", data.role);
-            localStorage.setItem("jwt", data.jwt);
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('password', data.password);
+            localStorage.setItem('role', data.role);
+            localStorage.setItem('jwt', data.jwt);
 
-            this.$router.push('/');
+            this.$router.push('/homeUser');
             window.location.reload(); //load pushed
         },
         failed: function () {

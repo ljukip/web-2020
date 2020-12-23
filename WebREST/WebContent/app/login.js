@@ -1,7 +1,7 @@
 Vue.component("login", {
     data: function () {
         return {
-            user: { username: '', password: '' },
+            user: { username: '', password: '', role: '' },
             error: false
         }
     },
@@ -65,13 +65,21 @@ Vue.component("login", {
                 return;
             }
             console.log("succes");
-            localStorage.setItem("username", data.username);
-            localStorage.setItem("password", data.password);
-            localStorage.setItem("role", data.role);
-            localStorage.setItem("jwt", data.jwt);
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('password', data.password);
+            localStorage.setItem('role', data.role);
+            localStorage.setItem('jwt', data.jwt);
 
             this.error = false;
-            this.$router.push('/');
+            // TODO: chek role and call corresponding homepage
+            this.user.role = localStorage.getItem('role');
+            if (this.user.role == "ADMIN") {
+                this.$router.push('/homeAdmin');
+            } else if (this.user.role == "HOST") {
+                this.$router.push('/homeHost');
+            } else {
+                this.$router.push('/homeUser');
+            }
             window.location.reload(); //load pushed
         },
 
