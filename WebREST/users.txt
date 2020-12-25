@@ -2,3 +2,4 @@ p,p,p,p,GUEST,female
 q,p,po,p,GUEST,female
 user,user,user,user,GUEST,other
 admin,admin,admin,admin,ADMIN,male
+host,host,host,host,HOST,other

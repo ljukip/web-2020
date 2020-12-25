@@ -71,15 +71,7 @@ Vue.component("login", {
             localStorage.setItem('jwt', data.jwt);
 
             this.error = false;
-            // TODO: chek role and call corresponding homepage
-            this.user.role = localStorage.getItem('role');
-            if (this.user.role == "ADMIN") {
-                this.$router.push('/homeAdmin');
-            } else if (this.user.role == "HOST") {
-                this.$router.push('/homeHost');
-            } else {
-                this.$router.push('/homeUser');
-            }
+            this.$router.push('/homeUser');
             window.location.reload(); //load pushed
         },
 

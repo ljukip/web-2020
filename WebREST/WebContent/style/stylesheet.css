@@ -53,7 +53,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  background-size: contain;
+  background-size: cover;
   color: rgba(54, 4, 42, 0.795);
   vertical-align: center;
   box-shadow: 11px 9px 9px rgba(54, 4, 42, 0.79);
@@ -150,14 +150,14 @@ a:visited {
   display: inline-block;
   font-size: 16px;
 
-  background-size: 100%;
+  background-size: cover;
 }
 a:hover {
-  color: #ffdff0;
+  color: rgb(82, 7, 63);
   outline: 0;
 }
 a:active {
-  background-color: rgb(253, 146, 226);
+  box-shadow: 11px 9px 9px #ffdff0;
   outline: 0;
 }
 
@@ -174,12 +174,12 @@ a:active {
 
 button:focus {
   background: rgb(167, 33, 133);
-  background-size: 100%;
+  background-size: cover;
   outline: 0;
 }
 button:active {
   background: rgba(199, 42, 160, 0.815);
-  background-size: 100%;
+  background-size: cover;
   outline: 0;
 }
 .navbar {
