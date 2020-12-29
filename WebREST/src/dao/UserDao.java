@@ -100,10 +100,12 @@ public class UserDao {
 			}
 		}
 	    
-	    public void update(User user, String contextPath) {
+	    public User update(User user, String contextPath) {
+
+			boolean match=false;
 	    	try {
 	    		File file = new File(path + "/web-2020/WebRest/users.txt");
-	    		File tempFile = new File(contextPath + "usersTemclp.txt");
+	    		File tempFile = new File(contextPath + "usersTemp.txt");
 				BufferedReader in = new BufferedReader(new FileReader(file));
 				BufferedWriter writer =null;
 				writer = new BufferedWriter(new FileWriter(tempFile, true));
@@ -111,20 +113,22 @@ public class UserDao {
 				String s = "", newS = "";
 				StringTokenizer st;
 				while ((s = in.readLine()) != null) {
-					s = s.trim();
+					//s = s.trim();
 					if (s.equals(""))
 						continue;
 					//uzimamo reci odvojene zarezom, trimujemo, proveravamo da li smo nasli trazeni username
-					st = new StringTokenizer(s, ",");
-					String username = st.nextToken().trim();
+					String[] tokens = s.split(",");
+					String username= tokens[2];
+					System.out.println(username +"+++++++++++++++++++++++++" +user.getUsername()); //ne moze da se menja username!!!
 					if (user.getUsername().equals(username)) {
 						//update-ujemo
 						newS += user.getName() + "," +
 				    			user.getSurname() + "," +
-				    			username + "," +
+				    			user.getUsername() + "," +
 				    			user.getPassword() + "," +
 				    			user.getRole() + "," +
-				    			user.getGender();
+				    			user.getGender() + "\r\n";
+						match=true;
 					} else {
 						newS += s + "\r\n";
 					}
@@ -133,6 +137,7 @@ public class UserDao {
 			//cuvamo promene
 			PrintWriter out = new PrintWriter(writer);
 			out.println(newS);
+			System.out.println("novi string:" + newS);
 			out.close();
 			Files.copy(tempFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	        tempFile.delete();
@@ -140,14 +145,22 @@ public class UserDao {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	    	for (User u : users) {
-	    	    if (user.getUsername().equals(u.getUsername())) {
-	    	    	users.remove(u);
-	    	    	users.add(user);
-	    	    }
+	    	if (match==true) {
+		    	User removeMe = null;
+		    	for (User u : users) {
+		    	    if (user.getUsername().equals(u.getUsername())) {
+		    	    	removeMe=u;
+		    	    }
+		    	}
+	    	    users.remove(removeMe);
+		    	users.add(user);
+		    	return user;
 	    	}
+	    	else
+	    		return null;
 	        
 	    }
+	    
 	    
 	    public void delete(User user) {
 	        users.remove(user);
@@ -175,6 +188,18 @@ public class UserDao {
 	    	}
 	    	System.out.println("nije nasao");
 			return false;
+	    }
+
+	    public User findUser(String username) {
+	    	for (User u : users) {
+	    		System.out.println("poredi:"+username + "i" + u.getUsername());
+	    	    if (username.equals(u.getUsername())) {
+	    	    	System.out.println("nasao");
+	    	    	return u;
+	    	    }
+	    	}
+	    	System.out.println("nije nasao");
+			return null;
 	    }
 
 }

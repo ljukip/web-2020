@@ -5,9 +5,13 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -28,6 +32,7 @@ public class UserService {
 	ServletContext ctx;
 
 	public UserService() {
+		super();
 	}
 	
 	//assures that the method is executed after dependency injection is done to perform any initialization
@@ -105,5 +110,36 @@ public class UserService {
 		}
 	}
 	
+	@GET
+	@Path("profileUser/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProfile(@Context HttpServletRequest request, @PathParam("username") String username) {
+		
+			UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+			System.out.println("username iz requesta je:" + username);
+			System.out.println("useDao iz requesta je:" + userDao);
+			User user = userDao.findUser(username);
+			if (user != null) {
+				return Response.status(Response.Status.OK).entity(user).build();
+			}
+			else
+				return Response.status(Response.Status.FORBIDDEN).build();
+	}
+	
+	@PUT
+	@Path("profileUser/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editProfile(@Context HttpServletRequest request, @PathParam("username") String username,
+			User user) {
+			System.out.println("in put method-----------------------------------------------------------------");
+			UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+			User updatedUser = userDao.update(user, ctx.getRealPath(""));
+			System.out.println("updating user:"+updatedUser.getUsername());
+			if (updatedUser != null) {
+				return Response.status(Response.Status.CREATED).entity(updatedUser).build();
+			}
+			return Response.status(Response.Status.FORBIDDEN).build();
+	}
 
 }

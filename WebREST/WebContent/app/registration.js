@@ -73,6 +73,7 @@ Vue.component("registration", {
                 <div v-if="messageVal==='wrongMatch'" style="color:  #c41055;text-align: center;font-family: cursive;font-size: 21;">Passwords do not match</div>
                 <div id="center">
                 <button class="button1" type="submit" v-on:click='registration(user)'>Register</button> 
+                <button class="button1" type="button" v-on:click='cancel()' > Cancel</button> 
                 </div>
                 </div>
             </form>  
@@ -81,6 +82,22 @@ Vue.component("registration", {
     
     `,
     methods: {
+        cancel: function () {
+            Swal.fire({
+                title: 'Are you sure you want to cancel changes?',
+                text: "Registration will be canceled",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ffdff0',
+                cancelButtonColor: '#c41088',
+                confirmButtonText: 'Yes, Im sure!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$router.push('/');
+                    window.location.reload();
+                }
+            })
+        },
 
         registration: function (user) {
             if (this.user.name == '') {
@@ -146,8 +163,15 @@ Vue.component("registration", {
             localStorage.setItem('role', data.role);
             localStorage.setItem('jwt', data.jwt);
 
-            this.$router.push('/homeUser');
-            window.location.reload(); //load pushed
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1400
+            })
+            setTimeout(this.$router.push('/homeUser'), 2100);
+            setTimeout(window.location.reload(), 2100); //load pushed
         },
         failed: function () {
             console.log('nije prosao');

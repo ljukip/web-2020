@@ -28,7 +28,7 @@ Vue.component("login", {
                     <div id="center">
                         <div v-if="error" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong username or password</div>
                         <button class="button1" type="submit" v-on:click='login(user)'>Login</button> 
-                        <button class="button1" type="button" reset> Cancel</button> 
+                        <button class="button1" v-on:click='cancel()' > Cancel</button> 
                     </div>
                     <p></p>
                     <p></p>
@@ -71,8 +71,31 @@ Vue.component("login", {
             localStorage.setItem('jwt', data.jwt);
 
             this.error = false;
-            this.$router.push('/homeUser');
-            window.location.reload(); //load pushed
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Login succesfull',
+                showConfirmButton: false,
+                timer: 1600
+            })
+            setTimeout(this.$router.push('/homeUser'), 2100);
+            setTimeout(window.location.reload(), 2100); //load pushed
+        },
+        cancel: function () {
+            Swal.fire({
+                title: 'Are you sure you want to cancel changes?',
+                text: "Registration will be canceled",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ffdff0',
+                cancelButtonColor: '#c41088',
+                confirmButtonText: 'Yes, Im sure!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$router.push('/');
+                    window.location.reload();
+                }
+            })
         },
 
         failed: function () {
