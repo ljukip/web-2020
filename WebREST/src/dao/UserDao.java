@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -201,5 +202,63 @@ public class UserDao {
 	    	System.out.println("nije nasao");
 			return null;
 	    }
+	    public Collection<User> findAll() {
+			return users;
+		}
+	    
+	    public Collection<User> filter(Collection<User> UsersToFilter, String name,  String surname, String username, String gender, String role) {
+
+			
+			if (name != null && name != "") {
+				Collection<User> temp = new ArrayList<User>();
+				for (User u : UsersToFilter) {
+					if (u.getName().toLowerCase().startsWith((name).toLowerCase())) {
+						temp.add(u);
+					}
+				}
+				UsersToFilter=temp;
+			}
+			if (surname != null && surname != "") {
+				Collection<User> temp = new ArrayList<User>();
+				for (User u : UsersToFilter) {
+					if (u.getSurname().toLowerCase().startsWith((surname).toLowerCase())) {
+						temp.add(u);
+					}
+				}
+				UsersToFilter=temp;
+			}
+	    	if (username != null && username != "") {
+	    		Collection<User> temp = new ArrayList<User>();
+				for (User u : UsersToFilter) {
+					if (u.getUsername().toLowerCase().startsWith((username).toLowerCase())) {
+						temp.add(u);
+					}
+				}
+				UsersToFilter=temp;
+			}
+
+			if (gender != null && username != "") {
+				Collection<User> temp = new ArrayList<User>();
+				for (User u : UsersToFilter) {
+					if (u.getGender().toLowerCase().equals((gender).toLowerCase())) {
+						temp.add(u);
+					}
+				}
+				UsersToFilter=temp;
+			}
+
+			if (role != null && username != "") {
+				Collection<User> temp = new ArrayList<User>();
+				for (User u : UsersToFilter) {
+					if (u.getRole().toString().toLowerCase().equals((role).toLowerCase())) {
+						temp.add(u);
+					}
+				}
+				UsersToFilter=temp;
+			}
+
+			return UsersToFilter;
+		}
+
 
 }

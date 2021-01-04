@@ -22,8 +22,8 @@ Vue.component("homeUser", {
                 <router-link style="width: 40%;" to='/'>apartments</router-link>
                 <router-link style="width: 20%;" to='/'>reservations</router-link>
                 <router-link v-if="user.role ==='GUEST'" style="width: 38%;" to='/profileUser'>profile</router-link>
-                <router-link v-if="user.role ==='HOST'" style="width: 38%;" to='/'>users</router-link>
-                <router-link v-if="user.role ==='ADMIN'" style="width: 38%;" to='/'>users</router-link>
+                <router-link v-if="user.role ==='HOST'" style="width: 38%;" to='/listUsers'>users</router-link>
+                <router-link v-if="user.role ==='ADMIN'" style="width: 38%;" to='/listUsers'>users</router-link>
             </div>
         </div>
 </div>

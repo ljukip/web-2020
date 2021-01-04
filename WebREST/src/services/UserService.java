@@ -1,6 +1,7 @@
 package services;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
@@ -13,9 +14,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.catalina.Role;
 
 import beans.User;
 import dao.UserDao;
@@ -140,6 +144,47 @@ public class UserService {
 				return Response.status(Response.Status.CREATED).entity(updatedUser).build();
 			}
 			return Response.status(Response.Status.FORBIDDEN).build();
+	}
+	
+	@GET
+	@Path("users/all/{role}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAll(@Context HttpServletRequest request,  @PathParam("role") String role) {
+		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+		if(role.equals("ADMIN")) {
+			Collection<User> users =userDao.findAll();
+			return Response.status(Response.Status.OK).entity(users).build();
+		}
+	return Response.status(Response.Status.FORBIDDEN).build();
+	}
+	
+	@GET
+	@Path("users/customers/{role}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCustomers(@Context HttpServletRequest request,  @PathParam("role") String role) {
+		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+		if(role.equals("HOST")) {
+			//TODO: show only customers
+			Collection<User> users =userDao.findAll();
+			return Response.status(Response.Status.OK).entity(users).build();
+		}
+	return Response.status(Response.Status.FORBIDDEN).build();
+	}
+	@GET
+	@Path("user/search/{role}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchUsers(@Context HttpServletRequest request, @PathParam("role") String loggedInRole, @QueryParam("name") String name, @QueryParam("surname") String surname, @QueryParam("username") String username,
+			@QueryParam("gender") String gender, @QueryParam("role") String role) {
+
+		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+		if(loggedInRole.equals("ADMIN")) {
+			Collection<User> usersToFilter =userDao.findAll();
+			Collection<User> filteredUsers= userDao.filter(usersToFilter, name, surname, username, gender,role);
+			System.out.println("u adminovim filterima,ok:"+ filteredUsers.toString());
+			return Response.status(Response.Status.OK).entity(filteredUsers).build();
+		}
+		
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 }

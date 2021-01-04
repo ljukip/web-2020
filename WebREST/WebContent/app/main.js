@@ -1,16 +1,17 @@
-
 const HomePage = { template: "<home></home>" };
 const Login = { template: "<login></login>" };
 const Registration = { template: "<registration></registration>" }
 const HomeUser = { template: "<homeUser></homeUser>" }
 const ProfileUser = { template: "<profileUser></profileUser>" }
+const ListUsers = { template: "<listUsers></listUsers>" }
 
 const routes = [
   { path: "/", component: HomePage },
   { path: "/login", component: Login },
   { path: "/registration", component: Registration },
   { path: "/homeUser", component: HomeUser },
-  { path: "/profileUser", component: ProfileUser }
+  { path: "/profileUser", component: ProfileUser },
+  { path: "/listUsers", component: ListUsers }
 ];
 
 const router = new VueRouter({
