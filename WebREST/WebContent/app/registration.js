@@ -159,7 +159,6 @@ Vue.component("registration", {
             }
             console.log("succes");
             localStorage.setItem('username', data.username);
-            localStorage.setItem('password', data.password);
             localStorage.setItem('role', data.role);
             localStorage.setItem('jwt', data.jwt);
 

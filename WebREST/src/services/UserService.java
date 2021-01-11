@@ -103,6 +103,7 @@ public class UserService {
 		}
 		if (!userDao.find(usernameForReg)) {
 			userDao.save(user, ctx.getRealPath(""));
+			//asign new jwtSession to user
 			String jwtSession = createJwtSession(user.getUsername());
 			user.setJwt(jwtSession);
 			System.out.println(jwtSession);

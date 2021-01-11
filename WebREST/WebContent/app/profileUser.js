@@ -144,7 +144,6 @@ Vue.component("profileUser", {
                             this.messageVal = 'SuccesfullUpdate';
                             setTimeout(() => this.messageVal = '', 6000);
                             localStorage.setItem('username', this.user.username);
-                            localStorage.setItem('password', this.user.password);
                             localStorage.setItem('role', this.user.role);
 
                             Swal.fire({

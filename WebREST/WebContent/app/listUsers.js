@@ -25,8 +25,8 @@ Vue.component("listUsers", {
     <h1 v-if="user.role ==='HOST'">List of all customers</h1>
     <div id="filter">
         <nav>
-            <label class="label1">Search</label>
             <hr style='background:#c41088;height:4px;'>
+            <label class="label1">Search</label>
             <form class="form-inline">
                 <input style="width:14% ;" v-model='searchedUser.name' type="text"
                     placeholder="name" aria-label="Search">
@@ -44,12 +44,12 @@ Vue.component("listUsers", {
                     <option v-for="role in roles">{{role}}</option>
                 </select>
                 <button class="button2" type="submit" v-on:click="search()">Search</button>
-                <button style='margin-right:5px;' class="button2" type="button">Reset</button>
+                <button style='margin-right:5px;' v-on:click="reset()" class="button2" type="button">Reset</button>
             </form>
             <hr style='background:#c41088;height:4px;'>
         </nav>
     </div>    
-    <div id="Div-panel">
+    <div id="Div-panel" style="display: inline;">
             <div>
                 <table class="myTable">
                     <thead>
@@ -113,6 +113,17 @@ Vue.component("listUsers", {
                     this.users = response.data;
                     this.searchedQuery = '?';
                 });
+
+        },
+        reset() {
+            if (this.user.role == "ADMIN") {
+                this.getAllUsers();
+            }
+            if (this.user.role == "HOST") {
+                this.getCustomers();
+            }
+
+            this.searchedQuery = '?';
 
         },
 

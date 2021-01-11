@@ -2,7 +2,7 @@ package beans;
 
 public class Amenity {
 
-	private enum Type{
+	public enum Type{
 		basic, family_features, dining, recreation, pet, parking,
 	}
 	
@@ -10,12 +10,18 @@ public class Amenity {
 	private String name;
 	private Type type;
 	
+	private boolean deleted;
 	
-	public Amenity(int id, String name, Type type) {
+	public Amenity() {
+		super();
+	}
+	
+	public Amenity(String name, Type type, int id, boolean deleted) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
+		this.deleted=deleted;
 	}
 	public int getId() {
 		return id;
@@ -34,6 +40,12 @@ public class Amenity {
 	}
 	public void setType(Type type) {
 		this.type = type;
+	}
+	public boolean getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	

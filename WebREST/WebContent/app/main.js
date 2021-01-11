@@ -4,6 +4,7 @@ const Registration = { template: "<registration></registration>" }
 const HomeUser = { template: "<homeUser></homeUser>" }
 const ProfileUser = { template: "<profileUser></profileUser>" }
 const ListUsers = { template: "<listUsers></listUsers>" }
+const Amenities = { template: "<amenities></amenities>" }
 
 const routes = [
   { path: "/", component: HomePage },
@@ -11,7 +12,8 @@ const routes = [
   { path: "/registration", component: Registration },
   { path: "/homeUser", component: HomeUser },
   { path: "/profileUser", component: ProfileUser },
-  { path: "/listUsers", component: ListUsers }
+  { path: "/listUsers", component: ListUsers },
+  { path: "/amenities", component: Amenities },
 ];
 
 const router = new VueRouter({
