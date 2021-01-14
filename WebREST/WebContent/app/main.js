@@ -1,10 +1,13 @@
+
 const HomePage = { template: "<home></home>" };
 const Login = { template: "<login></login>" };
-const Registration = { template: "<registration></registration>" }
-const HomeUser = { template: "<homeUser></homeUser>" }
-const ProfileUser = { template: "<profileUser></profileUser>" }
-const ListUsers = { template: "<listUsers></listUsers>" }
-const Amenities = { template: "<amenities></amenities>" }
+const Registration = { template: "<registration></registration>" };
+const HomeUser = { template: "<homeUser></homeUser>" };
+const ProfileUser = { template: "<profileUser></profileUser>" };
+const ListUsers = { template: "<listUsers></listUsers>" };
+const Amenities = { template: "<amenities></amenities>" };
+const AddApartment = { template: "<addApartment></addApartment>" };
+const Apartments = { template: "<apartments></apartments>" };
 
 const routes = [
   { path: "/", component: HomePage },
@@ -14,6 +17,8 @@ const routes = [
   { path: "/profileUser", component: ProfileUser },
   { path: "/listUsers", component: ListUsers },
   { path: "/amenities", component: Amenities },
+  { path: "/addApartment", component: AddApartment },
+  { path: "/apartments", component: Apartments },
 ];
 
 const router = new VueRouter({

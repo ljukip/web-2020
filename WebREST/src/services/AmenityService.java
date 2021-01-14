@@ -62,7 +62,7 @@ public class AmenityService {
 		@Produces(MediaType.APPLICATION_JSON)
 		public Response getAll(@Context HttpServletRequest request,  @PathParam("role") String role) {
 			AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
-			if(role.equals("ADMIN")) {
+			if(!role.equals("GUEST")) {
 				Collection<Amenity> amenities =amenityDao.findAll();
 				return Response.status(Response.Status.OK).entity(amenities).build();
 			}

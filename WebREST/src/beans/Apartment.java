@@ -6,28 +6,54 @@ import java.util.Date;
 
 public class Apartment {
 	
-	private enum Type {room, apartment}
+	public enum Type {room, apartment}
 	
-	private String type;
+	private Type type;
 	private int capacity;
 	private int rooms;
 	private Location location;
-	private ArrayList <Date> datesAvailable;
-	private ArrayList <Date> availability;
+	private ArrayList <Date> datesAvailable; //host desides
+	private ArrayList <Date> availability; //dates left available after reservation has been made
+	private long to;
+	private long from;
 	private String host;
 	private Collection<Review> reviews;
 	private ArrayList<String> images;
-	private double pricePerNight;
+	private int price;
 	private String checkin;
 	private String checkout;
 	private String status;
 	private ArrayList <Amenity> amenities;
 	private Collection <Reservation> reservations;
+	private String id;
 	
 	
-	public Apartment(String type, int capacity, int rooms, Location location, ArrayList<Date> datesAvailable,
+	
+	public Apartment(String id, Type type, int capacity, int rooms, Location location, long to, long from, String host,
+			ArrayList<String> images, int pricePerNight, String checkin, String checkout, String status,
+			ArrayList<Amenity> amenities) {
+		super();
+		this.type = type;
+		this.capacity = capacity;
+		this.rooms = rooms;
+		this.location = location;
+		this.to = to;
+		this.from = from;
+		this.host = host;
+		this.images = images;
+		this.price = pricePerNight;
+		this.checkin = checkin;
+		this.checkout = checkout;
+		this.status = status;
+		this.amenities = amenities;
+		this.id = id;
+	}
+
+
+
+	public Apartment(Type type, int capacity, int rooms, Location location, ArrayList<Date> datesAvailable,
 			ArrayList<Date> availability, String host, Collection<Review> reviews, ArrayList<String> images,
-			double pricePerNight, String checkin, String checkout, String status, ArrayList<Amenity> amenities,
+			int pricePerNight, String checkin, String checkout, String status, ArrayList<Amenity> amenities,
 			Collection<Reservation> reservations) {
 		super();
 		this.type = type;
@@ -39,21 +65,50 @@ public class Apartment {
 		this.host = host;
 		this.reviews = reviews;
 		this.images = images;
-		this.pricePerNight = pricePerNight;
+		this.price = pricePerNight;
 		this.checkin = checkin;
 		this.checkout = checkout;
 		this.status = status;
 		this.amenities = amenities;
 		this.reservations = reservations;
 	}
+	
+	
+
+	public Apartment() {
+		// TODO Auto-generated constructor stub
+		super();
+	}
 
 
-	public String getType() {
+
+	public long getTo() {
+		return to;
+	}
+
+
+	public void setTo(long to) {
+		this.to = to;
+	}
+
+
+	public long getFrom() {
+		return from;
+	}
+
+
+	public void setFrom(long from) {
+		this.from = from;
+	}
+
+
+
+	public Type getType() {
 		return type;
 	}
 
 
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 
@@ -138,13 +193,13 @@ public class Apartment {
 	}
 
 
-	public double getPricePerNight() {
-		return pricePerNight;
+	public int getPricePerNight() {
+		return price;
 	}
 
 
-	public void setPricePerNight(double pricePerNight) {
-		this.pricePerNight = pricePerNight;
+	public void setPricePerNight(int pricePerNight) {
+		this.price = pricePerNight;
 	}
 
 
@@ -195,6 +250,16 @@ public class Apartment {
 
 	public void setReservations(Collection<Reservation> reservations) {
 		this.reservations = reservations;
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	

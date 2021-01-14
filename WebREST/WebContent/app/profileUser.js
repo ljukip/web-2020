@@ -63,10 +63,7 @@ Vue.component("profileUser", {
                         <label  v-if="passwordBool==='allow'" class="label1">New password : </label>
                         <label  v-if="passwordBool!='allow'" class="label1">Password : </label> 
                     </div>
-                    <div id="center" style="flex-direction: row;">
-                        <input v-if="passwordBool!='allow'" v-model="user.password" type="password" value="user.password" name="password" v-on:click='passwordChange()' > 
-                        <input v-if="passwordBool==='allow'" v-model="passwords.password2" type="password" name="password2" >      
-                    </div>
+                    
                     <div> 
                         <label  v-if="passwordBool==='allow'" class="label1">Confirm password : </label>
                     </div>

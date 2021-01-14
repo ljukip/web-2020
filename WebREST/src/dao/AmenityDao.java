@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import beans.Amenity;
+import beans.Apartment;
 
 public class AmenityDao {
 
@@ -38,6 +39,17 @@ public class AmenityDao {
 	    	for (Amenity a : amenities) {
 	    		System.out.println("poredi:"+id + "i" + a.getId());
 	    	    if (id==a.getId()) {
+	    	    	System.out.println("nasao");
+	    	    	return a;
+	    	    }
+	    	}
+	    	System.out.println("nije nasao");
+			return null;
+	    }
+	 public Amenity findAmenityName(String name) {
+	    	for (Amenity a : amenities) {
+	    		System.out.println("poredi:"+name + "i" + a.getName());
+	    	    if (name==a.getName()) {
 	    	    	System.out.println("nasao");
 	    	    	return a;
 	    	    }
@@ -231,4 +243,75 @@ public class AmenityDao {
 				}
 			}
 		}
+	    
+	    public ArrayList<Amenity> findAllByApartmentId(String contextPath, String id) {
+			ArrayList<Amenity> returnAmenities = new ArrayList<>();
+			BufferedReader in = null;
+			try {
+				File file = new File(path + "/web-2020/WebRest/apartment-amenities.txt");
+				in = new BufferedReader(new FileReader(file));
+				String line;
+				StringTokenizer st;
+				while ((line = in.readLine()) != null) {
+					line = line.trim();
+					if (line.equals("") || line.indexOf('#') == 0)
+						continue;
+					st = new StringTokenizer(line, ",");
+					while (st.hasMoreTokens()) {
+						String apartmentId = st.nextToken().trim();
+						String amenityId = st.nextToken().trim();
+						for(int i=0; i<amenities.size();i++) {
+							if (apartmentId.equals(id) && amenities.get(i).getId()==Integer.parseInt(amenityId)) {
+								returnAmenities.add(amenities.get(i));
+							}
+						}
+						
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				if (in != null) {
+					try {
+						in.close();
+					} catch (Exception e) {
+						return null;
+					}
+				}
+			}
+			return returnAmenities;
+		}
+	    
+	    public void updateApartmentAmenities(String contextPath, Apartment apartment) {
+			ArrayList<Amenity> amenities = apartment.getAmenities();
+			try {
+				File file = new File(path + "/web-2020/WebRest/apartment-amenities.txt");
+				BufferedReader in = new BufferedReader(new FileReader(file));
+				String line = "", text = "";
+				StringTokenizer st;
+				while ((line = in.readLine()) != null) {
+					line = line.trim();
+					if (line.equals("") || line.indexOf('#') == 0)
+						continue;
+					st = new StringTokenizer(line, ",");
+					String apartmentId = st.nextToken().trim();
+					if (!apartmentId.equals(apartment.getId())) {
+						text += line + "\r\n";
+					}
+				}
+				in.close();
+				// Avoids doubling of amenities
+				for (Amenity amenity : amenities) {
+					text += apartment.getId() + "," + amenity.getId() + "\r\n";
+				}
+				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+				PrintWriter out = new PrintWriter(writer);
+				out.println(text);
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 }

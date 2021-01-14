@@ -7,6 +7,8 @@ body {
   display: block;
   font-family: cursive;
   color: rgb(82, 7, 63);
+  background-size: 1600px 1160px;
+  background-image: url("../images/bg2.jpg");
 }
 #app {
   margin: 0 !important;
@@ -32,6 +34,10 @@ body {
   height: 14vh;
   background-color: transparent;
   display: contents;
+}
+.map {
+  height: 140px;
+  width: 40%;
 }
 select {
   padding: 7px;
@@ -77,6 +83,7 @@ tr:hover {
   min-height: 50vh;
   min-width: 90%;
   margin-left: 5%;
+  margin-right: 5%;
   margin-top: 0%;
   margin-bottom: 5%;
   border-radius: 1%;
@@ -85,6 +92,8 @@ tr:hover {
   align-items: center;
   justify-content: center;
   vertical-align: top;
+  background-size: 1600px 1160px;
+  background-image: url("../images/bg2.jpg");
 }
 .oval {
   background-color: transparent;
@@ -131,6 +140,47 @@ tr:hover {
   display: block;
   padding-bottom: 40px;
   padding-left: 25%;
+}
+/*Theme the Tabulator element*/
+#example-table-theme {
+  background-color: transparent;
+  border: none;
+  border-radius: 10px;
+}
+
+/*Theme the header*/
+#example-table-theme .tabulator-header {
+  background-color: #c41088;
+  color: #fff;
+}
+
+/*Allow column header names to wrap lines*/
+#example-table-theme .tabulator-header .tabulator-col,
+#example-table-theme .tabulator-header .tabulator-col-row-handle {
+  white-space: normal;
+  background-color: #c41088;
+}
+
+/*Color the table rows*/
+#example-table-theme .tabulator-tableHolder .tabulator-table .tabulator-row {
+  color: #fff;
+  background-color: #e9c4d8;
+}
+
+/*Color even rows*/
+#example-table-theme
+  .tabulator-tableHolder
+  .tabulator-table
+  .tabulator-row:nth-child(even) {
+  background-color: #ffdff0;
+}
+#div-form {
+  flex-direction: column;
+  display: inline-flex;
+
+  margin-top: 26px;
+  margin-right: 30px;
+  margin-left: 30px;
 }
 .button1 {
   background-color: #c41088;
@@ -207,6 +257,13 @@ tr:hover {
   border-radius: 14px;
   right: 80%;
 }
+.vdp-datepicker * {
+  box-sizing: inherit !important;
+}
+.vdp-datepicker {
+  position: relative;
+  text-align: center !important;
+}
 input[type="text"],
 input[type="password"] {
   width: 50%;
@@ -222,7 +279,7 @@ input[type="password"] {
   display: inline-block;
   font-size: 16px;
   border-radius: 11px;
-  color: #e9c4d8;
+  color: lavenderblush;
   text-align: center;
   font-family: cursive;
 }
