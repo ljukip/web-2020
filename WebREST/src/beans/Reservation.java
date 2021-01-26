@@ -4,85 +4,105 @@ import java.util.Date;
 
 public class Reservation {
 	
-	private enum Status {created, declined, canceled, accepted, completed}
+	public enum Status {created, declined, canceled, accepted, completed}
 	
-	private Apartment apartmentReserved;
-	private Date startDate;
-	private int numberOfNights;
-	private float price;
-	private String notes;
-	private String guest;
-	private String status;
-	
-	public Reservation(Apartment apartmentReserved, Date startDate, int numberOfNights, float price, String notes,
-			String guest, String status) {
+	private String id;
+	private String apartmentId;
+	private long from;
+	private long to;
+	private int night;
+	private int price;
+	private String message;
+	private String guestId;
+	private Status status;
+
+
+	public Reservation() {
 		super();
-		this.apartmentReserved = apartmentReserved;
-		this.startDate = startDate;
-		this.numberOfNights = numberOfNights;
+	}
+
+	public Reservation(String id, String apartmentId, long from, long to, int night, int price, String message,
+			String guestId, Status status) {
+		this.id = id;
+		this.apartmentId = apartmentId;
+		this.from = from;
+		this.to = to;
+		this.night = night;
 		this.price = price;
-		this.notes = notes;
-		this.guest = guest;
+		this.message = message;
+		this.guestId = guestId;
 		this.status = status;
 	}
 
-	public Apartment getApartmentReserved() {
-		return apartmentReserved;
+	public String getId() {
+		return id;
 	}
 
-	public void setApartmentReserved(Apartment apartmentReserved) {
-		this.apartmentReserved = apartmentReserved;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public String getApartmentId() {
+		return apartmentId;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setApartmentId(String apartmentId) {
+		this.apartmentId = apartmentId;
 	}
 
-	public int getNumberOfNights() {
-		return numberOfNights;
+	public long getFrom() {
+		return from;
 	}
 
-	public void setNumberOfNights(int numberOfNights) {
-		this.numberOfNights = numberOfNights;
+	public void setFrom(long from) {
+		this.from = from;
 	}
 
-	public float getPrice() {
+	public long getTo() {
+		return to;
+	}
+
+	public void setTo(long to) {
+		this.to = to;
+	}
+
+	public int getNight() {
+		return night;
+	}
+
+	public void setNight(int night) {
+		this.night = night;
+	}
+
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
-	public String getNotes() {
-		return notes;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setNotes(String notes) {
-		this.notes = notes;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	public String getGuest() {
-		return guest;
+	public String getGuestId() {
+		return guestId;
 	}
 
-	public void setGuest(String guest) {
-		this.guest = guest;
+	public void setGuestId(String guestId) {
+		this.guestId = guestId;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
-	
-	
-	
-
 }
