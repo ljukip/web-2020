@@ -1,4 +1,4 @@
-Vue.component("addApartment", {
+Vue.component("editApartment", {
     data: function () {
         return {
             username: localStorage.getItem('username'),
@@ -57,7 +57,7 @@ Vue.component("addApartment", {
                 <div id="div-form" style="width: 24%;">
                     <label class="label1">Type:</label>
                     <div v-if="messageVal==='wrongType'" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Please select type</div>
-                    <select id='listTypes'v-model="apartment.type">
+                    <select v-model="apartment.type">
                         <option disabled value="">Type</option>
                         <option v-for="type in types">{{type}}</option>
                     </select>
@@ -84,16 +84,16 @@ Vue.component("addApartment", {
                 <div  id="div-form" style="width: 24%;">
                     <label class="label1">Price per night:</label>
                     <div v-if="messageVal==='wrongPrice'" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Please enter </div>
-                    <input style="width: fit-content;" v-model="apartment.price" type="text" name="price" placeholder="Enter price" >
+                    <input style="width: fit-content;" v-model="apartment.pricePerNight"  type="text" name="price" >
                 </div>
                 
                 <div  id="div-form" style="width: 56%;" >
                 <label class="label1">location:</label>
                 <div v-if="messageVal==='wrongLocation'" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Please enter </div>
                     <div style="flex-direction: row; display: inline-flex;">
-                        <input v-model="apartment.location.langitude" type="text" name="langitude" placeholder="Enter langitude" > 
+                        <input v-model="apartment.location.longitude" type="text" name="langitude" > 
                         <p>-</p>
-                        <input v-model="apartment.location.latitude" type="text" name="latitude" placeholder="Enter latitude" >      
+                        <input v-model="apartment.location.latitude" type="text" name="latitude" >      
                     </div>
                 </div>
                 
@@ -101,11 +101,11 @@ Vue.component("addApartment", {
                     <label class="label1">Address</label>
                     <div v-if="messageVal==='wrongAddress'" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Please enter </div>
                     <div style="flex-direction: row; display: inline-flex;">
-                        <input  v-model="apartment.location.address.streetNum" type="text" name="streetNum" placeholder="Street & Number" > 
+                        <input  v-model="apartment.location.adress.streetNum" type="text" name="streetNum" placeholder="Street & Number" > 
                         <p>-</p>
-                        <input v-model="apartment.location.address.city" type="text" name="city" placeholder="City" >
+                        <input v-model="apartment.location.adress.city"  type="text" name="city" placeholder="City" >
                         <p>-</p>
-                        <input v-model="apartment.location.address.zip" type="text" name="zip" placeholder="Zip code" >      
+                        <input v-model="apartment.location.adress.zip"  type="text" name="zip" placeholder="Zip code" >      
                     </div>
                 </div>
                 
@@ -189,7 +189,7 @@ Vue.component("addApartment", {
 
             
             <div id="center" style="flex-direction: row;">
-                <button class="button1" type="submit" v-on:click='save()'>Save</button> 
+                <button class="button1" type="submit" v-on:click='save(apartment)'>Save</button> 
                 <button class="button1" type="button" v-on:click='cancel()' > Cancel</button> 
             </div>
                 
@@ -225,7 +225,7 @@ Vue.component("addApartment", {
                 }
             })
         },
-        save() {
+        save(apartment) {
             console.log("in save" + this.dates.from + "to" + this.dates.to);
 
             console.log(this.apartment);
@@ -237,19 +237,19 @@ Vue.component("addApartment", {
                 this.messageVal = 'wrongLocaton';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.apartment.location.langitude == '') {
+            else if (this.apartment.location.longitude == '') {
                 this.messageVal = 'wronglocation';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.apartment.location.address.streetNum == '') {
+            else if (this.apartment.location.adress.streetNum == '') {
                 this.messageVal = 'wrongAddress';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.apartment.location.address.city == '') {
+            else if (this.apartment.location.adress.city == '') {
                 this.messageVal = 'wrongAddress';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.apartment.location.address.zip == '') {
+            else if (this.apartment.location.adress.zip == '') {
                 this.messageVal = 'wrongAddress';
                 setTimeout(() => this.messageVal = '', 6000);
             }
@@ -261,7 +261,7 @@ Vue.component("addApartment", {
                 this.messageVal = 'wrongGuest';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.apartment.price == null && isNaN(this.apartment.price)) {
+            else if (this.apartment.pricePerNight == null && isNaN(this.apartment.pricePerNight)) {
                 this.messageVal = 'wrongPrice';
                 setTimeout(() => this.messageVal = '', 6000);
             }
@@ -280,7 +280,7 @@ Vue.component("addApartment", {
 
                 console.log("sending:" + this.apartment + this.username);
                 axios
-                    .post('rest/apartment/' + this.role, this.apartment)
+                    .post('rest/apartment', apartment)
                     .then(Response => {
                         console.log(Response);
                         if (this.images != null) {
@@ -303,7 +303,7 @@ Vue.component("addApartment", {
                             Swal.fire({
                                 position: 'top-end',
                                 icon: 'success',
-                                title: 'Apartment has been created',
+                                title: 'Apartment has been updated',
                                 showConfirmButton: false,
                                 timer: 1400
                             })
@@ -360,11 +360,19 @@ Vue.component("addApartment", {
             this.$router.push('/login');
 
         axios
-            .get('rest/amenities/all/' + this.role)
+            .get('rest/amenities/all/' + localStorage.getItem("editID"))
             .then(response => {
                 this.allAmenities = response.data;
                 this.arrangeAmenities();
             })
+        axios
+            .get('rest/apartment/edit/' + localStorage.getItem("editID"))
+            .then(response => {
+                this.apartment = response.data;
+                this.dates.from = new Date(response.data.to);
+                this.dates.to = new Date(response.data.from);
+            })
+        localStorage.removeItem("editTrue");
     },
     mounted() {
 

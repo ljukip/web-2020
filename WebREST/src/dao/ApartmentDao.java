@@ -53,6 +53,16 @@ public class ApartmentDao {
 			}
 			return null;
 		}
+	 public Collection<Apartment> findByHostId(String id) {
+			Collection<Apartment> allApartments = apartments;
+			Collection<Apartment> hostsApartments = new ArrayList<Apartment>();
+			for (Apartment a : allApartments) {
+				if (a.getHost().equals(id)) {
+					hostsApartments.add(a);
+				}
+			}
+			return hostsApartments;
+		}
 	 
 	 public Apartment update(Apartment apartment, String contextPath) {
 		 boolean match=false;
@@ -71,8 +81,8 @@ public class ApartmentDao {
 						continue;
 					//uzimamo reci odvojene zarezom, trimujemo, proveravamo da li smo nasli trazeni id
 					String[] tokens = s.split(",");
-					String id= tokens[2];
-					System.out.println(id +"+++++++++++++++++++++++++" +apartment.getId()); 
+					String id= tokens[0];
+					System.out.println(id +"+++++++++++update++++++++++++++" +apartment.getId()); 
 					if (id.equals(apartment.getId())) {
 						//update-ujemo
 						newS += apartment.getId() + "," +
@@ -140,7 +150,7 @@ public class ApartmentDao {
 						continue;
 					//uzimamo reci odvojene zarezom, trimujemo, proveravamo da li smo nasli trazeni username
 					String[] tokens = s.split(",");
-					String id= tokens[2];
+					String id= tokens[0];
 					System.out.println(id +"+++++++++++++++++++++++++" +apartment.getId()); //ne moze da se menja username!!!
 					if (id.equals(apartment.getId())) {
 						//update-ujemo
@@ -180,7 +190,7 @@ public class ApartmentDao {
 	    	}
 	    	maxId++;
 	    	apartment.setId(Integer.toString(maxId));
-	    	apartment.setStatus("neaktivan");
+	    	apartment.setStatus("inactive");
 	    	
 	    	String s = apartment.getId() + "," +
 	    			apartment.getType()+ "," +

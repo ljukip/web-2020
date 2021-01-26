@@ -130,6 +130,81 @@ public class ApartmentService {
 		return Response.status(Response.Status.CREATED).entity(newApartment).build();
 		
 	}
+	
+	@POST
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateApartment(@Context HttpServletRequest request, String type) {
+		
+		Apartment apartment= new Apartment();
+		//String username=apartment.getHost();
+		System.out.println("usao u update apartment primio:" + type );
+		String[] tokens1 = type.split("\\[");
+		for (int i=0;i<tokens1.length;i++) {
+			tokens1[i].trim();
+			System.out.println("tokeni1:"+ tokens1[i]);};
+			String[] a=tokens1[2].split("\\]");
+		
+			String delims = "[\\\":,{}]+";
+			String[] sID=a[1].split(delims);
+			String amenitiesString=a[0];
+		for (int i=0;i<sID.length;i++) {
+			System.out.println("tokeniA:"+ sID[i]);
+			if(sID[i].equals("id")) {
+				apartment.setId(sID[i+1]);
+			}
+			if(sID[i].equals("pricePerNight")) {
+				apartment.setPricePerNight(Integer.parseInt(sID[i+1]));
+			}
+		};
+		
+		
+		
+		String[] tokens = type.split(delims);
+		for (int i=0;i<tokens.length;i++) {
+			tokens[i].trim();
+			System.out.println("tokeni:"+ tokens[i]);};
+		
+		apartment.setType(Apartment.Type.valueOf(tokens[2]));
+		apartment.setCapacity(Integer.parseInt(tokens[4]));
+		apartment.setRooms(Integer.parseInt(tokens[6]));
+		Adress address=new Adress(tokens[14],tokens[16],tokens[18]);
+		Location location=new Location(tokens[9],tokens[11],address); //proveri da li lokacija postoji, ako ne, dodaj je
+		LocationDao locationDao = (LocationDao) ctx.getAttribute("locationDao");
+		location.setId(tokens[20]);
+		location.setId(locationDao.update(location, contextPath));
+		apartment.setLocation(location);
+		apartment.setCheckin(tokens[32]);
+		apartment.setCheckout(tokens[34]);
+		apartment.setStatus(tokens[36]);
+
+		System.out.println("amenity string:" + amenitiesString);
+		ArrayList<Amenity> amenities=new ArrayList<Amenity>();
+		AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
+		String[] names=amenitiesString.split("[\\\":,{}]+");
+		for(int i=0; i<names.length;i++) {
+			System.out.println("names:"+names[i]);
+			if(names[i].equals("id")) {
+				int b=i+1;
+				System.out.print("za upis:"+names[b]);
+				Amenity amenity=amenityDao.findAmenity(Integer.parseInt(names[b]));
+				 amenities.add(amenity);
+			}
+		}
+		apartment.setAmenities(amenities);
+		apartment.setTo(Long.parseLong(tokens[22]));
+		apartment.setFrom(Long.parseLong(tokens[24]));
+		apartment.setHost(tokens[26]);
+		
+		System.out.println("novi apartment: " + apartment.getLocation()+ apartment.getRooms() + apartment.getHost()+ apartment.getAmenities());
+		
+		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+		Apartment newApartment = apartmentDao.update(apartment, ctx.getRealPath(""));
+
+		return Response.status(Response.Status.CREATED).entity(newApartment).build();
+		
+	}
 
 	@POST
 	@Path("/{id}/upload")
@@ -163,35 +238,27 @@ public class ApartmentService {
 	}
 
 	@GET
-	@Path("/")
+	@Path("/{role}/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<ApartmentDto> getAllApartments(@Context HttpServletRequest request) {
+	public Collection<ApartmentDto> getAllApartments(@Context HttpServletRequest request, @PathParam("role") String role, @PathParam("username") String username) {
     	AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
     	ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
 
     	Collection<Apartment> apartments = apartmentDao.findAll();
 		Collection<ApartmentDto> retApartment = new ArrayList<>();
 		
-		//za neulogovanog/neregistrovanog korisnika vraca sve aktivne stanove  
-		/*if(username == null) {
+		//for gueast and unregistered user return all active apartments
+		if (role== null || role.equals("GUEST")) {
 			apartments = apartments.stream()
-					.filter(a ->  a.getStatus().equals("aktivan"))
+					.filter(a ->  a.getStatus().equals("active"))
 					.collect(Collectors.toList());
 		}
-		//za guesta vraca sve aktivne stanove  
-		else if (userDao.findOne(username).getRole().toString().equals("GUEST")) {
-			apartments = apartments.stream()
-					.filter(a ->  a.getStatus().equals("aktivan"))
-					.collect(Collectors.toList());
-		}*/
-		/*//za hosta vraca sve njegove aktivne i nekativne stanove
-		else if (userDao.findOne(username).getRole().toString().equals("HOST")) {
-			
-			apartments = apartmentDAO.findAllApartByHostId(username);
-//			apartments = apartments.stream()
-//					.filter(a ->  a.getStatus().equals("aktivan"))
-//					.collect(Collectors.toList());
-		}*/
+		//for host return all his apartments(bot active and inactive)
+		else if (role.equals("HOST")) {	
+			apartments = apartmentDao.findByHostId(username);
+		}
+		
+		else if(role.equals("ADMIN")) {apartments=apartments;}
 
 		for (Apartment a : apartments) {
 			ArrayList<Amenity> amenitiesOriginal = amenityDao.findAllByApartmentId(ctx.getRealPath(""), a.getId());
@@ -207,6 +274,48 @@ public class ApartmentService {
 
 		return retApartment;
 	}
-
 	
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateStatus(@Context HttpServletRequest request,  @PathParam("id") String id) {
+		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+		Collection<Apartment> apartments = apartmentDao.findAll();
+		Apartment apartment= new Apartment();
+		
+		for (Apartment a : apartments) {
+			System.out.println("menajmo status za:" + a.getId() + id);
+			if(a.getId().equals(id)) {
+				apartment=a;
+				apartment.setStatus("active");
+				System.out.println("menajmo status u:" + apartment.getStatus());
+			}
+		}
+		return Response.status(Response.Status.CREATED).entity(apartmentDao.update(apartment, ctx.getRealPath(""))).build();
+	}
+	
+	@DELETE
+	@Path("/delete/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteAmenity(@Context HttpServletRequest request,  @PathParam("id") String id) {
+		
+		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+		System.out.println("id za brisanje je:"+ id);
+		Apartment apartment = apartmentDao.findOne(id);
+		apartmentDao.delete(apartment, ctx.getRealPath(""));
+		return Response.status(Response.Status.CREATED).build();
+	}
+	
+	@GET
+	@Path("/edit/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response forEditApartment(@Context HttpServletRequest request,  @PathParam("id") String id) {
+		
+		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+		System.out.println("id za eidt je:"+ id);
+		Apartment apartment = apartmentDao.findOne(id);
+		
+		return Response.status(Response.Status.CREATED).entity(apartment).build();
+	}
 }

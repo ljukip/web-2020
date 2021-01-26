@@ -127,7 +127,7 @@ public class LocationDao {
 	        return location.getId();
 	    }
 	 
-	 public Location update(Location location, String contextPath) {
+	 public String update(Location location, String contextPath) {
 		 boolean match=false;
 	    	try {
 	    		File file = new File(path + "/web-2020/WebRest/locations.txt");
@@ -149,7 +149,7 @@ public class LocationDao {
 					if (id.equals(location.getId())) {
 						//update-ujemo
 						newS += location.getLongitude() + "," +
-								location.getLongitude() + "," +
+								location.getLatitude() + "," +
 								location.getId() + "," +
 								location.getAdress().getStreetNum()+ "," +
 								location.getAdress().getCity()+ "," +
@@ -181,7 +181,7 @@ public class LocationDao {
 		    	}
 	    	    locations.remove(removeMe);
 		    	locations.add(location);
-		    	return location;
+		    	return location.getId();
 	    	}
 	    	else
 	    		return null;

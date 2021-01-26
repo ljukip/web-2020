@@ -12,8 +12,6 @@ public class Apartment {
 	private int capacity;
 	private int rooms;
 	private Location location;
-	private ArrayList <Date> datesAvailable; //host desides
-	private ArrayList <Date> availability; //dates left available after reservation has been made
 	private long to;
 	private long from;
 	private String host;
@@ -60,8 +58,6 @@ public class Apartment {
 		this.capacity = capacity;
 		this.rooms = rooms;
 		this.location = location;
-		this.datesAvailable = datesAvailable;
-		this.availability = availability;
 		this.host = host;
 		this.reviews = reviews;
 		this.images = images;
@@ -143,24 +139,7 @@ public class Apartment {
 	}
 
 
-	public ArrayList<Date> getDatesAvailable() {
-		return datesAvailable;
-	}
-
-
-	public void setDatesAvailable(ArrayList<Date> datesAvailable) {
-		this.datesAvailable = datesAvailable;
-	}
-
-
-	public ArrayList<Date> getAvailability() {
-		return availability;
-	}
-
-
-	public void setAvailability(ArrayList<Date> availability) {
-		this.availability = availability;
-	}
+	
 
 
 	public String getHost() {

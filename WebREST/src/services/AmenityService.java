@@ -18,8 +18,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Amenity;
+import beans.Apartment;
 import beans.User;
 import dao.AmenityDao;
+import dao.ApartmentDao;
 import dao.UserDao;
 
 @Path("/amenities")
@@ -67,6 +69,19 @@ public class AmenityService {
 				return Response.status(Response.Status.OK).entity(amenities).build();
 			}
 		return Response.status(Response.Status.FORBIDDEN).build();
+		}
+		
+		@GET
+		@Path("/apartments/{id}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response getApartments(@Context HttpServletRequest request,  @PathParam("id") String id) {
+			//AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
+			ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+			//int apartmentID=Integer.parseInt(id);
+			Apartment apartment = apartmentDao.findOne(id);
+			
+			Collection<Amenity> amenities =apartment.getAmenities();
+			return Response.status(Response.Status.OK).entity(amenities).build();
 		}
 		
 		@DELETE

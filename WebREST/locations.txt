@@ -1,5 +1,7 @@
 12,12,0,tolstojeva,novi sad,21000
-44,44,32,puskinova,14,21000
-12,12,33,puskinova,46,21000
-12,12,34,tolstojeva,novi sad,21000
-12,12,35,tolstojeva,novi sad,21000
+46,46,1,puskinova 1,novi sad,21000
+46,46,2,puskinova,novi sad,21000
+13,13,3,puskinova 16,novi sad,21000
+12,12,4,tolstojeva,novi sad,21000
+12,12,5,tolstojeva,novi sad,21000
+
