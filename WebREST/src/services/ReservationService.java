@@ -61,6 +61,7 @@ public class ReservationService {
 		public Response add(@Context HttpServletRequest request,  Reservation reservation) {
 			System.out.println("usao u reservation request");
 			ReservationDao reservationDao = (ReservationDao) ctx.getAttribute("reservationDao");
+			reservation.setStatus(Reservation.Status.valueOf("created"));
 			reservationDao.save(reservation, ctx.getRealPath(""));
 			return Response.status(Response.Status.OK).entity(reservation).build();
 		

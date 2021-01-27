@@ -84,18 +84,28 @@ Vue.component("newReservation", {
     methods: {
         reserve() {
             //todo: validacija
+            console.log(this.dates.to.getTime(), this.apartment.pricePerNight)
             axios
                 .post('rest/reservations', {
                     apartmentId: this.reservation.apartmentId,
                     guestId: this.username,
-                    from: this.reservation.from,
-                    to: this.reservation.to,
+                    from: this.dates.from.getTime(),
+                    to: this.dates.to.getTime(),
                     night: this.reservation.night,
-                    price: this.reservation.price,
+                    price: this.apartment.pricePerNight,
                     message: this.reservation.message
                 })
                 .then((responce) => this.succes(responce.data))
                 .catch(() => this.failed());
+        },
+        succes() {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Reservation has been created',
+                showConfirmButton: false,
+                timer: 1400
+            })
         },
         cancel() {
             Swal.fire({

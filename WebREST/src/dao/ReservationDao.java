@@ -108,7 +108,7 @@ public class ReservationDao {
 	        
 		}
 	 
-	 public void save(Reservation reservation, String contextPath) {
+	 public Reservation save(Reservation reservation, String contextPath) {
 	    	//set id byincrementation {check all ids, take the max and asign next}
 	    	int maxId=-1; //first will be 0 (maxId+1)
 	    	for (int i=0; i<reservations.size();i++) {
@@ -151,6 +151,7 @@ public class ReservationDao {
 			}
 	    	
 			reservations.add(reservation);
+			return reservation;
 	    }
 	 
 	    public void read (String contextPath) {
