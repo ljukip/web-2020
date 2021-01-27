@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -26,6 +27,17 @@ public class ReservationDao {
 	
 	public ReservationDao(String contextPath) {
 		read(contextPath);
+	}
+	
+	public Collection<Reservation> findAllApartmentId(String id) {
+		Collection<Reservation> allReservations = getAll();
+		Collection<Reservation> reservations = new ArrayList<Reservation>();
+		for (Reservation r : allReservations) {
+			if (r.getApartmentId().equals(id)) {
+				reservations.add(r);
+			}
+		}
+		return reservations;
 	}
 	
 	 public Reservation findApartmentId(String apartmentId) {

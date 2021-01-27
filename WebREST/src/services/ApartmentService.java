@@ -35,9 +35,11 @@ import beans.Amenity;
 import beans.Apartment;
 import beans.ApartmentDto;
 import beans.Location;
+import beans.Reservation;
 import dao.AmenityDao;
 import dao.ApartmentDao;
 import dao.LocationDao;
+import dao.ReservationDao;
 
 @Path("/apartment")
 public class ApartmentService {
@@ -55,11 +57,12 @@ public class ApartmentService {
 		if (ctx.getAttribute("apartmentDao") == null) {
 			if (ctx.getAttribute("amenityDao") == null) {
 				ctx.setAttribute("amenityDao", new AmenityDao(contextPath));
-				System.out.println(contextPath);
 			}
 			if (ctx.getAttribute("locationDao") == null) {
 				ctx.setAttribute("locationDao", new LocationDao(contextPath));
-				System.out.println(contextPath);
+			}
+			if (ctx.getAttribute("reservationDao") == null) {
+				ctx.setAttribute("reservationDao", new ReservationDao(contextPath));
 			}
 			ctx.setAttribute("apartmentDao", new ApartmentDao(contextPath,(LocationDao) ctx.getAttribute("locationDao"), (AmenityDao) ctx.getAttribute("amenityDao")));
 			System.out.println(contextPath);
@@ -320,8 +323,12 @@ public class ApartmentService {
 	public Response forEditApartment(@Context HttpServletRequest request,  @PathParam("id") String id) {
 		
 		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+		ReservationDao reservationDao = (ReservationDao) ctx.getAttribute("reservationDao");
 		System.out.println("id za eidt je:"+ id);
 		Apartment apartment = apartmentDao.findOne(id);
+		Collection<Reservation> reservations=reservationDao.findAllApartmentId(id);
+		System.out.println("reservations:"+ reservations);
+		apartment.setReservations(reservations);
 		
 		return Response.status(Response.Status.CREATED).entity(apartment).build();
 	}

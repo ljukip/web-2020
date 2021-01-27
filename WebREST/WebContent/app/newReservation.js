@@ -46,7 +46,8 @@ Vue.component("newReservation", {
         
         <div id="div-form" style="width: 24%;">
             <label class="label1">Address:</label>
-            <label class="label1">{{apartment.location.adress.streetNum}},{{apartment.location.adress.city}},{{apartment.location.adress.zip}}</label>
+            <label class="label1">{{apartment.location.adress.streetNum}},
+                <br>{{apartment.location.adress.city}},{{apartment.location.adress.zip}}</label>
         </div>    
         
         <div id="div-form" style="width: 24%;">
@@ -136,6 +137,7 @@ Vue.component("newReservation", {
             }
             this.insertReservationData();
 
+            //check availability
             if (this.apartment.reservations != null) {
                 for (let i = 0; i < this.apartment.reservations.length; i++) {
                     let available = {

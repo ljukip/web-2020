@@ -45,6 +45,7 @@ public class Apartment {
 		this.status = status;
 		this.amenities = amenities;
 		this.id = id;
+		this.reservations= new ArrayList<Reservation>();
 	}
 
 
@@ -228,6 +229,7 @@ public class Apartment {
 
 
 	public void setReservations(Collection<Reservation> reservations) {
+		this.reservations= new ArrayList<Reservation>();
 		this.reservations = reservations;
 	}
 
