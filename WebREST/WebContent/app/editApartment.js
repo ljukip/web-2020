@@ -366,7 +366,7 @@ Vue.component("editApartment", {
                 this.arrangeAmenities();
             })
         axios
-            .get('rest/apartment/edit/' + localStorage.getItem("editID"))
+            .get('rest/apartment/' + localStorage.getItem("editID"))
             .then(response => {
                 this.apartment = response.data;
                 this.dates.from = new Date(response.data.to);

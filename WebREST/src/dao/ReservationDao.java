@@ -137,7 +137,7 @@ public class ReservationDao {
 				writer = new BufferedWriter(new FileWriter(file, true));
 				PrintWriter out = new PrintWriter(writer); //txt
 				out.println(s);
-				System.out.println("upisuje u amenities: " + s);
+				System.out.println("upisuje u reservations: " + s);
 				out.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();

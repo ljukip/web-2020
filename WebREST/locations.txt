@@ -4,4 +4,6 @@
 13,13,3,puskinova 16,novi sad,21000
 12,12,4,tolstojeva,novi sad,21000
 12,12,5,tolstojeva,novi sad,21000
+12,12,6,tolstojeva,novi sad,21000
+12,12,7,tolstojeva 55,novi sad,21000
 

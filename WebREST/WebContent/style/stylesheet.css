@@ -259,6 +259,14 @@ tr:hover {
 }
 .vdp-datepicker * {
   box-sizing: inherit !important;
+  min-inline-size: fit-content !important;
+}
+
+.vdp-datepicker__calendar .cell.highlighted {
+  background: #ffdff049 !important;
+}
+.cell.day.selected {
+  background: #e9c4d8 !important;
 }
 .vdp-datepicker {
   position: relative;

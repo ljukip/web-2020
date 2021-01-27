@@ -13,7 +13,8 @@ Vue.component("apartments", {
                 price: '',
                 status: ''
             },
-            callID: ''
+            callID: '',
+            reserveTrue: ''
 
         }
     },
@@ -48,11 +49,21 @@ Vue.component("apartments", {
                         price: this.apartments[i].price,
                         status: s,
                         edit: 'click to edit',
-                        details: 'click for details'
+                        details: 'click for details',
+                        reserve: 'click to reserve'
                     }
                 ];
 
                 table.updateOrAddData(this.tableData);
+            }
+            if (this.role === 'GUEST') {
+                table.addColumn({
+                    title: "Reserve", field: "reserve", formatter: "button", cellClick: function (e, cell) {
+                        localStorage.setItem("reserveID", cell.getRow().getData().id);
+                        localStorage.setItem("reserveTrue", true);
+                        window.location.reload();
+                    }
+                }, false, "reserve");
             }
             if (this.role === 'HOST' || this.role === 'ADMIN') {
                 table.addColumn({
@@ -86,9 +97,7 @@ Vue.component("apartments", {
                     }
                 }, false, "status");
                 table.addColumn({
-                    title: "Edit", field: "edit", formatter: "button", cellClick: function (e, cell) {
-                        //edit(cell.getRow().getData().id);
-                        //this.$router.push("editApartment");
+                    title: "Edit", field: "edit", cellClick: function (e, cell) {
                         localStorage.setItem("editID", cell.getRow().getData().id);
                         localStorage.setItem("editTrue", true);
                         window.location.reload();
@@ -164,6 +173,10 @@ Vue.component("apartments", {
             })
         if (localStorage.getItem("editTrue")) {
             this.$router.push('/editApartment');
+            window.location.reload();
+        }
+        if (localStorage.getItem("reserveTrue")) {
+            this.$router.push('/newReservation');
             window.location.reload();
         }
     },

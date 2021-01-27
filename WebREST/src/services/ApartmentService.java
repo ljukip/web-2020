@@ -144,7 +144,14 @@ public class ApartmentService {
 		for (int i=0;i<tokens1.length;i++) {
 			tokens1[i].trim();
 			System.out.println("tokeni1:"+ tokens1[i]);};
-			String[] a=tokens1[2].split("\\]");
+			String[] a;
+			if (tokens1.length==2) {
+				a=tokens1[1].split("\\]");
+			}
+			else {
+				a=tokens1[2].split("\\]");
+			}
+			
 		
 			String delims = "[\\\":,{}]+";
 			String[] sID=a[1].split(delims);
@@ -255,7 +262,7 @@ public class ApartmentService {
 		}
 		//for host return all his apartments(bot active and inactive)
 		else if (role.equals("HOST")) {	
-			apartments = apartmentDao.findByHostId(username);
+			apartments = apartmentDao.findByHostUsername(username);
 		}
 		
 		else if(role.equals("ADMIN")) {apartments=apartments;}
@@ -308,7 +315,7 @@ public class ApartmentService {
 	}
 	
 	@GET
-	@Path("/edit/{id}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response forEditApartment(@Context HttpServletRequest request,  @PathParam("id") String id) {
 		

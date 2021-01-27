@@ -53,11 +53,11 @@ public class ApartmentDao {
 			}
 			return null;
 		}
-	 public Collection<Apartment> findByHostId(String id) {
+	 public Collection<Apartment> findByHostUsername(String username) {
 			Collection<Apartment> allApartments = apartments;
 			Collection<Apartment> hostsApartments = new ArrayList<Apartment>();
 			for (Apartment a : allApartments) {
-				if (a.getHost().equals(id)) {
+				if (a.getHost().equals(username)) {
 					hostsApartments.add(a);
 				}
 			}
