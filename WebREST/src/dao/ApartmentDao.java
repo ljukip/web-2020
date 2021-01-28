@@ -287,7 +287,7 @@ public class ApartmentDao {
 			}
 		}
 	 
-	 private ArrayList<String> loadImages(String contextPath, String id) {
+	 public ArrayList<String> loadImages(String contextPath, String id) {
 			ArrayList<String> images = new ArrayList<>();
 			BufferedReader in = null;
 			try {

@@ -7,7 +7,7 @@ body {
   display: block;
   font-family: cursive;
   color: rgb(82, 7, 63);
-  background-size: 1600px 1160px;
+  background-size: 1600px 1383px;
   background-image: url("../images/bg2.jpg");
 }
 #app {
@@ -34,6 +34,32 @@ body {
   height: 14vh;
   background-color: transparent;
   display: contents;
+}
+.carousel-item {
+  height: 65vh !important;
+  min-height: 350px !important;
+  background: no-repeat center center scroll !important;
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
+}
+
+#slideshow {
+  margin: 50px auto;
+  position: relative;
+  width: 511px;
+  height: 266px;
+  padding: 4px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+#slideshow > div {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
 }
 .map {
   height: 140px;

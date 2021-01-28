@@ -36,10 +36,12 @@ import beans.Apartment;
 import beans.ApartmentDto;
 import beans.Location;
 import beans.Reservation;
+import beans.Review;
 import dao.AmenityDao;
 import dao.ApartmentDao;
 import dao.LocationDao;
 import dao.ReservationDao;
+import dao.ReviewDao;
 
 @Path("/apartment")
 public class ApartmentService {
@@ -66,6 +68,9 @@ public class ApartmentService {
 			}
 			ctx.setAttribute("apartmentDao", new ApartmentDao(contextPath,(LocationDao) ctx.getAttribute("locationDao"), (AmenityDao) ctx.getAttribute("amenityDao")));
 			System.out.println(contextPath);
+			if (ctx.getAttribute("reviewDao") == null) {
+				ctx.setAttribute("reviewDao", new ReviewDao(contextPath));
+			}
 		}
 		
 	}
@@ -231,14 +236,14 @@ public class ApartmentService {
 
 			// TODO: Check if paths work on windows
 			//String path = ctx.getRealPath("") + "images/" + id;
-			String path= apartmentDao.getPath() + "/web-2020/WebRest/images/" + id;
+			String path= apartmentDao.getPath() + "/web-2020/WebRest/WebContent/imgs/" + id;
 			System.out.println("path:" + path);
 			new File(path).mkdirs();
 			File file = new File(path, fileDetail.getFileName());
 
 			try (FileOutputStream out = new FileOutputStream(file)) {
 				ReaderWriter.writeTo(filePart.getEntityAs(InputStream.class), out);
-				apartmentDao.saveImage(ctx.getRealPath(""), "images/" + id + "/" + fileDetail.getFileName(), id);
+				apartmentDao.saveImage(ctx.getRealPath(""), "imgs/" + id + "/" + fileDetail.getFileName(), id);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
@@ -325,10 +330,16 @@ public class ApartmentService {
 		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
 		ReservationDao reservationDao = (ReservationDao) ctx.getAttribute("reservationDao");
 		System.out.println("id za eidt je:"+ id);
+		
 		Apartment apartment = apartmentDao.findOne(id);
 		Collection<Reservation> reservations=reservationDao.findAllApartmentId(id);
-		System.out.println("reservations:"+ reservations);
 		apartment.setReservations(reservations);
+		//ucitati slike i review
+		apartment.setImages(apartmentDao.loadImages(ctx.getRealPath(""), id));
+		
+		ReviewDao reviewDao = (ReviewDao) ctx.getAttribute("reviewDao");
+		Collection <Review> reviews = reviewDao.getApartments(id);
+		apartment.setReviews(reviews);
 		
 		return Response.status(Response.Status.CREATED).entity(apartment).build();
 	}

@@ -32,6 +32,18 @@ public class ReviewDao {
         return reviews;
     }
 	
+	public List<Review> getApartments(String apartmentId) {
+		List<Review> apartmentsReview = new ArrayList<>();
+		for (Review r : reviews) {
+    		System.out.println("poredi:"+apartmentId + "i" + r.getApartmentId());
+    	    if (r.getApartmentId().equals(apartmentId)) {
+    	    	System.out.println("nasao");
+    	    	apartmentsReview.add(r);
+    	    }
+    	}
+		return apartmentsReview;
+    }
+	
 	public Review update(String contextPath, Review review) {
 		
 		 boolean match=false;

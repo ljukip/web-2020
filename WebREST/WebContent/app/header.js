@@ -15,9 +15,9 @@ Vue.component("top-header", {
       <a href="#/homeUser" v-if="user.role" data-toggle="tooltip" title="home"><img  src="images/home.png" width="31" height="31"> </a>
       <a href="#/" v-if="!user.role" data-toggle="tooltip" title="home"><img  src="images/home.png" width="31" height="31"> </a>
       <a href="#/profileUser" v-if="user.role" data-toggle="tooltip" title="profile"><img  src="images/profile.png" width="31" height="31"> </a> 
-      <a href="#" v-if="user.role" data-toggle="tooltip" title="reservations"><img  src="images/res.png" width="31" height="31"> </a> 
-      <a href="#" data-toggle="tooltip" title="apartments"><img  src="images/apa.png" width="31" height="31"> </a>
-      <a href="#" v-if="user.role ==='ADMIN'|| user.role=== 'HOST'" data-toggle="tooltip" title="users"><img  src="images/users.png" width="31" height="31"> </a>
+      <a href="#/reservations" v-if="user.role" data-toggle="tooltip" title="reservations"><img  src="images/res.png" width="31" height="31"> </a> 
+      <a href="#/apartments" data-toggle="tooltip" title="apartments"><img  src="images/apa.png" width="31" height="31"> </a>
+      <a href="#/listUsers" v-if="user.role ==='ADMIN'|| user.role=== 'HOST'" data-toggle="tooltip" title="users"><img  src="images/users.png" width="31" height="31"> </a>
       <p style='font-size:26px;float:left;font-family: cursive;color:#c41088;'><b>ROOMRY</b></p>
       <p style='font-size:26px;float:left;font-family:Brush Script MT;'>
       <br>apartments and rooms for rent</p>

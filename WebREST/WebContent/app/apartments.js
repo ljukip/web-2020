@@ -1,7 +1,7 @@
 Vue.component("apartments", {
     data: function () {
         return {
-            role: '',
+            role: localStorage.getItem('role'),
             username: '',
             apartments: [],
             tableData: [],
@@ -20,9 +20,13 @@ Vue.component("apartments", {
     },
     template: `
     <div>
-        <p>probaaa</p>
-        <div style="flex-direction: column;" id="example-table-theme"></div>
+        <h1>Apartments</h1>
+        <hr style='background:#c41088;height:4px;'>
+        <div style="flex-direction: column; margin-top: 56px; margin-bottom: 56px;" id="example-table-theme"></div>
     
+        <hr style='background:#c41088;height:4px;'>
+        <button class="button1" v-if="role==='HOST'" @click="$router.push('/addApartment')  ">New apartment</button>
+        <hr  v-if="role==='HOST'" style='background:#c41088;height:4px;'>
     </div>
     
     `,
@@ -61,7 +65,7 @@ Vue.component("apartments", {
                     title: "Reserve", field: "reserve", formatter: "button", cellClick: function (e, cell) {
                         localStorage.setItem("reserveID", cell.getRow().getData().id);
                         localStorage.setItem("reserveTrue", true);
-                        window.location.reload();
+                        window.location.assign('#/newReservation');
                     }
                 }, false, "reserve");
             }
@@ -100,11 +104,16 @@ Vue.component("apartments", {
                     title: "Edit", field: "edit", cellClick: function (e, cell) {
                         localStorage.setItem("editID", cell.getRow().getData().id);
                         localStorage.setItem("editTrue", true);
-                        window.location.reload();
+                        window.location.assign('#/editApartment/');
                     }
                 }, false, "delete");
 
-                table.addColumn({ title: "Details", field: "details", cellClick: function (e, cell) { } }, false, "delete");
+                table.addColumn({
+                    title: "Details", field: "details", cellClick: function (e, cell) {
+                        localStorage.setItem("detailsID", cell.getRow().getData().id);
+                        window.location.assign('#/apartmentDetails');
+                    }
+                }, false, "delete");
             }
             // deleteApartment(id) {}
 
@@ -171,13 +180,13 @@ Vue.component("apartments", {
             .then(response => {
                 this.load(response.data)
             })
-        if (localStorage.getItem("editTrue")) {
+        /*if (localStorage.getItem("editID")) {
             this.$router.push('/editApartment');
             window.location.reload();
         }
-        if (localStorage.getItem("reserveTrue")) {
+        if (localStorage.getItem("reserveID")) {
             this.$router.push('/newReservation');
             window.location.reload();
-        }
+        }*/
     },
 })

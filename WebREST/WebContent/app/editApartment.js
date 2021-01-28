@@ -43,7 +43,7 @@ Vue.component("editApartment", {
             guestCapacity: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
             messageVal: '',
             images: null,
-            formData: ''
+            formData: '',
 
         }
     },
@@ -371,8 +371,8 @@ Vue.component("editApartment", {
                 this.apartment = response.data;
                 this.dates.from = new Date(response.data.to);
                 this.dates.to = new Date(response.data.from);
+                localStorage.removeItem('editID');
             })
-        localStorage.removeItem("editID");
     },
     mounted() {
 
