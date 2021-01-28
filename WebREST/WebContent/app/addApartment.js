@@ -253,7 +253,7 @@ Vue.component("addApartment", {
                 this.messageVal = 'wrongAddress';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.apartment.rooms == null) {
+            else if (this.apartment.rooms == null && this.apartment.type == 'apartment') {
                 this.messageVal = 'wrongRoom';
                 setTimeout(() => this.messageVal = '', 6000);
             }

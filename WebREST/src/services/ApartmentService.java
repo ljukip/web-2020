@@ -102,7 +102,8 @@ public class ApartmentService {
 		Apartment apartment= new Apartment();
 		apartment.setType(Apartment.Type.valueOf(tokens[2]));
 		apartment.setCapacity(Integer.parseInt(tokens[4]));
-		apartment.setRooms(Integer.parseInt(tokens[6]));
+		if (!tokens[6].equals("null")) {apartment.setRooms(Integer.parseInt(tokens[6]));}
+		else {apartment.setRooms(1);}
 		Adress address=new Adress(tokens[14],tokens[16],tokens[18]);
 		Location location=new Location(tokens[9],tokens[11],address); //proveri da li lokacija postoji, ako ne, dodaj je
 		LocationDao locationDao = (LocationDao) ctx.getAttribute("locationDao");
