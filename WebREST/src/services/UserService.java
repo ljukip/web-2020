@@ -1,6 +1,7 @@
 package services;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -21,7 +22,13 @@ import javax.ws.rs.core.Response;
 
 import org.apache.catalina.Role;
 
+import beans.Apartment;
+import beans.Reservation;
 import beans.User;
+import dao.AmenityDao;
+import dao.ApartmentDao;
+import dao.LocationDao;
+import dao.ReservationDao;
 import dao.UserDao;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -45,6 +52,20 @@ public class UserService {
 		if (ctx.getAttribute("userDao") == null) {
 			String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("userDao", new UserDao(contextPath));
+			
+			if (ctx.getAttribute("reservationDao") == null) {
+				ctx.setAttribute("reservationDao", new ReservationDao(contextPath));
+			}
+			
+			if (ctx.getAttribute("apartmentDao") == null) {
+				if (ctx.getAttribute("amenityDao") == null) {
+					ctx.setAttribute("amenityDao", new AmenityDao(contextPath));
+				}
+				if (ctx.getAttribute("locationDao") == null) {
+					ctx.setAttribute("locationDao", new LocationDao(contextPath));
+				}
+				ctx.setAttribute("apartmentDao", new ApartmentDao(contextPath,(LocationDao) ctx.getAttribute("locationDao"), (AmenityDao) ctx.getAttribute("amenityDao")));
+			}
 			System.out.println(contextPath);
 		}
 	}
@@ -160,28 +181,52 @@ public class UserService {
 	}
 	
 	@GET
-	@Path("users/customers/{role}")
+	@Path("users/customers/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCustomers(@Context HttpServletRequest request,  @PathParam("role") String role) {
-		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
-		if(role.equals("HOST")) {
-			//TODO: show only customers
-			Collection<User> users =userDao.findAll();
-			return Response.status(Response.Status.OK).entity(users).build();
-		}
-	return Response.status(Response.Status.FORBIDDEN).build();
+	public Response getCustomers(@Context HttpServletRequest request,  @PathParam("username") String username) {
+		
+		Collection<User> users=GetHostsUsers(username);
+		
+		return Response.status(Response.Status.OK).entity(users).build();
 	}
+	
+	public Collection<User> GetHostsUsers(String username) {
+		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+		ReservationDao reservationDao = (ReservationDao) ctx.getAttribute("reservationDao");
+		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+			
+		Collection<User> users = new ArrayList<User>();
+		Collection<Apartment> hostsApartments = apartmentDao.findByHostUsername(username);
+		
+		for (Apartment a : hostsApartments) {
+			System.out.println("hosts apartments:" + hostsApartments);
+			Collection<Reservation> reservations = reservationDao.findAllApartmentId(a.getId());
+		
+			for (Reservation r : reservations) {
+				System.out.print("hosts id:" + r.getGuestId());
+				User user = userDao.findUser(r.getGuestId());
+				if (!users.contains(user))
+					users.add(user);
+			}
+		}
+		return users;
+	}
+	
 	@GET
-	@Path("user/search/{role}")
+	@Path("user/search/{role}/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchUsers(@Context HttpServletRequest request, @PathParam("role") String loggedInRole, @QueryParam("name") String name, @QueryParam("surname") String surname, @QueryParam("username") String username,
+	public Response searchUsers(@Context HttpServletRequest request, @PathParam("role") String loggedInRole,@PathParam("username") String hostUsername, @QueryParam("name") String name, @QueryParam("surname") String surname, @QueryParam("username") String username,
 			@QueryParam("gender") String gender, @QueryParam("role") String role) {
 
 		UserDao userDao = (UserDao) ctx.getAttribute("userDao");
 		if(loggedInRole.equals("ADMIN")) {
 			Collection<User> usersToFilter =userDao.findAll();
 			Collection<User> filteredUsers= userDao.filter(usersToFilter, name, surname, username, gender,role);
-			System.out.println("u adminovim filterima,ok:"+ filteredUsers.toString());
+			return Response.status(Response.Status.OK).entity(filteredUsers).build();
+		}
+		else if(loggedInRole.equals("HOST")) {
+			Collection<User> usersToFilter =GetHostsUsers(hostUsername);
+			Collection<User> filteredUsers= userDao.filter(usersToFilter, name, surname, username, gender,role);
 			return Response.status(Response.Status.OK).entity(filteredUsers).build();
 		}
 		

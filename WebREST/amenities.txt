@@ -2,3 +2,4 @@ userEdited,basic,0,true
 golf,family_features,1,false
 pool,recreation,2,false
 
+all-inclusive,dining,3,false

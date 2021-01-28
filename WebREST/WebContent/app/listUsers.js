@@ -39,7 +39,7 @@ Vue.component("listUsers", {
                     <option disabled value="">Gender</option>
                     <option v-for="gender in genders">{{gender}}</option>
                 </select>
-                <select id='listOfRoles' v-model="searchedUser.role">
+                <select  v-if="user.role ==='ADMIN'" id='listOfRoles' v-model="searchedUser.role">
                     <option disabled value="">Role</option>
                     <option v-for="role in roles">{{role}}</option>
                 </select>
@@ -87,7 +87,7 @@ Vue.component("listUsers", {
         getCustomers() {
             //gets all users and puts them in users[]
             axios
-                .get('rest/users/customers/' + this.user.role)
+                .get('rest/users/customers/' + localStorage.getItem('username'))
                 .then(Response => (this.users = Response.data));
         },
         search() {
@@ -108,7 +108,7 @@ Vue.component("listUsers", {
             }
 
             axios
-                .get('rest/user/search/' + this.user.role + this.searchedQuery)
+                .get('rest/user/search/' + this.user.role + '/' + this.user.username + this.searchedQuery)
                 .then(response => {
                     this.users = response.data;
                     this.searchedQuery = '?';
@@ -131,10 +131,10 @@ Vue.component("listUsers", {
 
     created() {
         this.role = localStorage.getItem('role');
-        if (this.role == "HOST") {
+        if (this.role === "HOST") {
             this.getCustomers();
         }
-        else if (this.role == "ADMIN") {
+        else if (this.role === "ADMIN") {
             this.getAllUsers();
         }
     }
