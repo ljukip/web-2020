@@ -25,7 +25,7 @@ public class ReviewDao {
 	String path=currentDir.toAbsolutePath().toString();
 	
 	public ReviewDao(String contextPath) {
-		read(contextPath);
+		read();
 	}
 	
 	public List<Review> getAll() {
@@ -107,7 +107,7 @@ public class ReviewDao {
 		}
 	
 	
-	public void save(Review review, String contextPath) {
+	public void save(Review review) {
     	//set id byincrementation {check all ids, take the max and asign next}
     	int maxId=-1; //first will be 0 (maxId+1)
     	for (int i=0; i<reviews.size();i++) {
@@ -150,7 +150,7 @@ public class ReviewDao {
     }
 	
 	
-	public void read (String contextPath) {
+	public void read () {
 		BufferedReader in = null;
 		try {
 			File file = new File(path + "/web-2020/WebRest/reviews.txt");

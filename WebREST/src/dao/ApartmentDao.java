@@ -55,6 +55,7 @@ public class ApartmentDao {
 		}
 	 public Collection<Apartment> findByHostUsername(String username) {
 			Collection<Apartment> allApartments = apartments;
+			System.out.println("apartmani**********************************"+ allApartments);
 			Collection<Apartment> hostsApartments = new ArrayList<Apartment>();
 			for (Apartment a : allApartments) {
 				if (a.getHost().equals(username)) {
@@ -179,7 +180,7 @@ public class ApartmentDao {
 	 }
 
 	 
-	 public Apartment save(Apartment apartment, String contextPath) {
+	 public Apartment save(Apartment apartment) {
 	    	//set id byincrementation {check all ids, take the max and asign next}
 	    	int maxId=-1; //first will be 0 (maxId+1)
 	    	for (int i=0; i<apartments.size();i++) {

@@ -111,7 +111,7 @@ public class ReviewsService {
 			System.out.println("usao u ReviewDao request");
 			ReviewDao reviewDao = (ReviewDao) ctx.getAttribute("reviewDao");
 			review.setPublished(false);
-			reviewDao.save(review, ctx.getRealPath(""));
+			reviewDao.save(review);
 			return Response.status(Response.Status.OK).entity(review).build();
 		
 

@@ -104,7 +104,7 @@ public class ReservationService {
 			System.out.println("usao u reservation request");
 			ReservationDao reservationDao = (ReservationDao) ctx.getAttribute("reservationDao");
 			reservation.setStatus(Reservation.Status.valueOf("created"));
-			reservationDao.save(reservation, ctx.getRealPath(""));
+			reservationDao.save(reservation);
 			return Response.status(Response.Status.OK).entity(reservation).build();
 		
 

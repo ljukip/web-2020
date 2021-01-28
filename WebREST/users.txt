@@ -5,4 +5,5 @@ host,host,host,host,HOST,other
 proba,probic,probic,probic,GUEST,female
 r,r,r,r,GUEST,female
 a,a,a,a,ADMIN,female
+ljubica,prelic,ljubica,ljubica,GUEST,female
 

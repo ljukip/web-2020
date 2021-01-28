@@ -123,7 +123,7 @@ public class UserService {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 		if (!userDao.find(usernameForReg)) {
-			userDao.save(user, ctx.getRealPath(""));
+			userDao.save(user);
 			//asign new jwtSession to user
 			String jwtSession = createJwtSession(user.getUsername());
 			user.setJwt(jwtSession);

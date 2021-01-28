@@ -72,6 +72,9 @@ public class ApartmentService {
 			if (ctx.getAttribute("reviewDao") == null) {
 				ctx.setAttribute("reviewDao", new ReviewDao(contextPath));
 			}
+			if (ctx.getAttribute("reviewDao") == null) {
+				ctx.setAttribute("reviewDao", new ReviewDao(contextPath));
+			}
 		}
 		
 	}
@@ -103,7 +106,7 @@ public class ApartmentService {
 		Adress address=new Adress(tokens[14],tokens[16],tokens[18]);
 		Location location=new Location(tokens[9],tokens[11],address); //proveri da li lokacija postoji, ako ne, dodaj je
 		LocationDao locationDao = (LocationDao) ctx.getAttribute("locationDao");
-		location.setId(locationDao.save(location, contextPath));
+		location.setId(locationDao.save(location));
 		apartment.setLocation(location);
 		apartment.setPricePerNight(Integer.parseInt(tokens[20]));
 		apartment.setCheckin(tokens[22]);
@@ -134,7 +137,7 @@ public class ApartmentService {
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
-		Apartment newApartment = apartmentDao.save(apartment, ctx.getRealPath(""));
+		Apartment newApartment = apartmentDao.save(apartment);
 
 		return Response.status(Response.Status.CREATED).entity(newApartment).build();
 		
@@ -269,7 +272,7 @@ public class ApartmentService {
 					.filter(a ->  a.getStatus().equals("active"))
 					.collect(Collectors.toList());
 		}
-		//for host return all his apartments(bot active and inactive)
+		//for host return all his apartments(both active and inactive)
 		else if (role.equals("HOST")) {	
 			apartments = apartmentDao.findByHostUsername(username);
 		}

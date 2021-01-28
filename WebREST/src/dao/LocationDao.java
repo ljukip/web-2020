@@ -25,7 +25,7 @@ public class LocationDao {
 	String path=currentDir.toAbsolutePath().toString();
 	
 	public LocationDao(String contextPath) {
-		read(contextPath);
+		read();
 	}
 	
 	 public List<Location> getAll() {
@@ -45,7 +45,7 @@ public class LocationDao {
 			return location;
 		}
 	 
-	 public void read (String contextPath) {
+	 public void read () {
 			BufferedReader in = null;
 			try {
 				File file = new File(path + "/web-2020/WebRest/locations.txt");
@@ -84,7 +84,7 @@ public class LocationDao {
 				}
 			}
 		}
-	 public String save(Location location, String contextPath) {
+	 public String save(Location location) {
 	    	//set id byincrementation {check all ids, take the max and asign next}
 	    	int maxId=-1; //first will be 0 (maxId+1)
 	    	for (int i=0; i<locations.size();i++) {

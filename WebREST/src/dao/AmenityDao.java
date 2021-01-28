@@ -26,7 +26,7 @@ public class AmenityDao {
 	String path=currentDir.toAbsolutePath().toString();
 	
 	public AmenityDao(String contextPath) {
-		read(contextPath);
+		read();
 	}
 	
 	 public List<Amenity> getAll() {
@@ -165,7 +165,7 @@ public class AmenityDao {
 	 }
 	 
 	    
-	    public void save(Amenity amenity, String contextPath) {
+	    public void save(Amenity amenity) {
 	    	//set id byincrementation {check all ids, take the max and asign next}
 	    	int maxId=-1; //first will be 0 (maxId+1)
 	    	for (int i=0; i<amenities.size();i++) {
@@ -206,7 +206,7 @@ public class AmenityDao {
 	        amenities.add(amenity);
 	    }
 	    
-	    public void read (String contextPath) {
+	    public void read () {
 			BufferedReader in = null;
 			try {
 				File file = new File(path + "/web-2020/WebRest/amenities.txt");

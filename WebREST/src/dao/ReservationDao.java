@@ -26,7 +26,7 @@ public class ReservationDao {
 	String path=currentDir.toAbsolutePath().toString();
 	
 	public ReservationDao(String contextPath) {
-		read(contextPath);
+		read();
 	}
 	
 	public Collection<Reservation> findAllApartmentId(String id) {
@@ -120,7 +120,7 @@ public class ReservationDao {
 	        
 		}
 	 
-	 public Reservation save(Reservation reservation, String contextPath) {
+	 public Reservation save(Reservation reservation) {
 	    	//set id byincrementation {check all ids, take the max and asign next}
 	    	int maxId=-1; //first will be 0 (maxId+1)
 	    	for (int i=0; i<reservations.size();i++) {
@@ -166,7 +166,7 @@ public class ReservationDao {
 			return reservation;
 	    }
 	 
-	    public void read (String contextPath) {
+	    public void read () {
 			BufferedReader in = null;
 			try {
 				File file = new File(path + "/web-2020/WebRest/reservations.txt");

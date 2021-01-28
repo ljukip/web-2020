@@ -13,41 +13,47 @@ Vue.component("reservations", {
             role: localStorage.getItem("role"),
             status: '',
             today: new Date(),
+            currentSort: 'name',
+            currentSortDir: 'asc',
         }
     },
-    template: `
-    <div style="height: 81.7%;">
+    template: `<div style="height: 81.7%;">
     <nav style="background-color: lavenderblush;">
         <hr style='background:#c41088;height:4px;'>
         <label class="label1">Created reservations</label>
         <hr style='background:#c41088;height:4px;'>
     </nav>
     <div id="Div-panel" style="display: inline;">
-            <div>
-                <table class="myTable">
-                    <thead>
-                        <tr class="header">
-                            <th>reservations</th>
-                            <th  v-if="role==='HOST'">accept</th>
-                            <th  v-if="role==='HOST'">decline</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-bind:key='reservation.id' v-for='reservation in reservationsCreated'>
-                            <td>
-                                Guest: {{reservation.guestId}}<br>
-                                ApartmentID: {{reservation.apartmentId}}<br>
-                                From: {{new Date(reservation.from)}}<br>
-                                To: {{new Date(reservation.to)}}<br>
-                                No. of nights: {{reservation.night}}<br>
-                                Price: {{reservation.price}}<br>
-                            </td>
-                            <td  v-if="role==='HOST'"><button class="buttonChoose" v-on:click= "accept(reservation.id)" type="button"></button></td>
-                            <td  v-if="role==='HOST'"><button class="buttonChoose" style="background-image: url('./images/cnc.png');" v-on:click= "decline(reservation.id)" type="button"></button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div>
+            <table class="myTable">
+                <thead>
+                    <tr class="header">
+                        <th v-on:click="sort('price')">
+                            reservations <img src='./images/arrow.webp' style="width: 14px; height: 14px;">
+                        </th>
+                        <th v-if="role==='HOST'">accept</th>
+                        <th v-if="role==='HOST'">decline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-bind:key='reservation.id' v-for='reservation in reservationsCreated'>
+                        <td>
+                            Guest: {{reservation.guestId}}<br>
+                            ApartmentID: {{reservation.apartmentId}}<br>
+                            From: {{new Date(reservation.from)}}<br>
+                            To: {{new Date(reservation.to)}}<br>
+                            No. of nights: {{reservation.night}}<br>
+                            Price: {{reservation.price}}<br>
+                        </td>
+                        <td v-if="role==='HOST'"><button class="buttonChoose" v-on:click="accept(reservation.id)"
+                                type="button"></button></td>
+                        <td v-if="role==='HOST'"><button class="buttonChoose"
+                                style="background-image: url('./images/cnc.png');" v-on:click="decline(reservation.id)"
+                                type="button"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <nav style="background-color: lavenderblush;">
             <hr style='background:#c41088;height:4px;'>
             <label class="label1">Accepted reservatios</label>
@@ -58,9 +64,13 @@ Vue.component("reservations", {
             <table class="myTable">
                 <thead>
                     <tr class="header">
-                        <th>reservations</th>
-                        <th  v-if="role==='HOST'">complete</th>
-                        <th  v-if="role==='GUEST'">Cancel</th>
+
+                        <th v-on:click="sort('price')">
+                            reservations <img src='./images/arrow.webp' style="width: 14px; height: 14px;">
+                        </th>
+                        </th>
+                        <th>Complete</th>
+                        <th v-if="role==='GUEST'">Cancel</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,100 +83,117 @@ Vue.component("reservations", {
                             No. of nights: {{reservation.night}}<br>
                             Price: {{reservation.price}}<br>
                         </td>
-                        <td v-if="role==='HOST'"><button class="buttonChoose" v-on:click= "complete(reservation.id,reservation.to)" type="button"></button></td>
-                        <td  v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/cnc.png');" v-on:click= "cancel(reservation.id)" type="button"></button></td>
+                        <td v-if="role==='HOST'"><button class="buttonChoose"
+                                v-on:click="complete(reservation.id,reservation.to)" type="button"></button></td>
+                        <td v-if="role==='GUEST'"><button class="buttonChoose"
+                                style="background-image: url('./images/cnc.png');" v-on:click="cancel(reservation.id)"
+                                type="button"></button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-        <nav style="background-color: lavenderblush;">
-            <hr style='background:#c41088;height:4px;'>
-            <label class="label1">Declined reservatins</label>
-            <hr style='background:#c41088;height:4px;'>
-        </nav>
-            <div>
-                <table class="myTable">
-                    <thead>
-                        <tr class="header">
-                            <th>reservations</th>
-                            <th v-if="role==='GUEST'">Review</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-bind:key='reservation.id' v-for='reservation in reservationsDeclined'>
-                            <td>
-                                Guest: {{reservation.guestId}}<br>
-                                ApartmentID: {{reservation.apartmentId}}<br>
-                                From: {{new Date(reservation.from)}}<br>
-                                To: {{new Date(reservation.to)}}<br>
-                                No. of nights: {{reservation.night}}<br>
-                                Price: {{reservation.price}}<br>
-                            </td>
-                            <td v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/review.png');" v-on:click= "review(reservation.apartmentId)" type="button"></button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <nav style="background-color: lavenderblush;">
+        <hr style='background:#c41088;height:4px;'>
+        <label class="label1">Declined reservatins</label>
+        <hr style='background:#c41088;height:4px;'>
+    </nav>
+    <div>
+        <table class="myTable">
+            <thead>
+                <tr class="header">
+                    <th v-on:click="sort('price')">
+                        reservations <img src='./images/arrow.webp' style="width: 14px; height: 14px;">
+                    </th>
+                    <th v-if="role==='GUEST'">Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-bind:key='reservation.id' v-for='reservation in reservationsDeclined'>
+                    <td>
+                        Guest: {{reservation.guestId}}<br>
+                        ApartmentID: {{reservation.apartmentId}}<br>
+                        From: {{new Date(reservation.from)}}<br>
+                        To: {{new Date(reservation.to)}}<br>
+                        No. of nights: {{reservation.night}}<br>
+                        Price: {{reservation.price}}<br>
+                    </td>
+                    <td v-if="role==='GUEST'"><button class="buttonChoose"
+                            style="background-image: url('./images/review.png');"
+                            v-on:click="review(reservation.apartmentId)" type="button"></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <nav style="background-color: lavenderblush;">
-            <hr style='background:#c41088;height:4px;'>
-            <label class="label1">Completed reservatins</label>
-            <hr style='background:#c41088;height:4px;'>
-        </nav>
-            <div>
-                <table class="myTable">
-                    <thead>
-                        <tr class="header">
-                            <th>reservations</th>
-                            <th v-if="role==='GUEST'">Review</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-bind:key='reservation.id' v-for='reservation in reservationsCompleted'>
-                            <td>
-                                Guest: {{reservation.guestId}}<br>
-                                ApartmentID: {{reservation.apartmentId}}<br>
-                                From: {{new Date(reservation.from)}}<br>
-                                To: {{new Date(reservation.to)}}<br>
-                                No. of nights: {{reservation.night}}<br>
-                                Price: {{reservation.price}}<br>
-                            </td>
-                            <td v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/review.png');" v-on:click= "review(reservation.apartmentId)" type="button"></button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        <nav style="background-color: lavenderblush;">
-            <hr style='background:#c41088;height:4px;'>
-            <label class="label1">Canceled reservatins</label>
-            <hr style='background:#c41088;height:4px;'>
-        </nav>
-            <div>
-                <table class="myTable">
-                    <thead>
-                        <tr class="header">
-                            <th>reservations</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-bind:key='reservation.id' v-for='reservation in reservationsCanceled'>
-                            <td>
-                                Guest: {{reservation.guestId}}<br>
-                                ApartmentID: {{reservation.apartmentId}}<br>
-                                From: {{new Date(reservation.from)}}<br>
-                                To: {{new Date(reservation.to)}}<br>
-                                No. of nights: {{reservation.night}}<br>
-                                Price: {{reservation.price}}<br>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `,
+    <nav style="background-color: lavenderblush;">
+        <hr style='background:#c41088;height:4px;'>
+        <label class="label1">Completed reservatins</label>
+        <hr style='background:#c41088;height:4px;'>
+    </nav>
+    <div>
+        <table class="myTable">
+            <thead>
+                <tr class="header">
+                    <th v-on:click="sort('price')">
+                        reservations <img src='./images/arrow.webp' style="width: 14px; height: 14px;">
+                    </th>
+                    <th v-if="role==='GUEST'">Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-bind:key='reservation.id' v-for='reservation in reservationsCompleted'>
+                    <td>
+                        Guest: {{reservation.guestId}}<br>
+                        ApartmentID: {{reservation.apartmentId}}<br>
+                        From: {{new Date(reservation.from)}}<br>
+                        To: {{new Date(reservation.to)}}<br>
+                        No. of nights: {{reservation.night}}<br>
+                        Price: {{reservation.price}}<br>
+                    </td>
+                    <td v-if="role==='GUEST'"><button class="buttonChoose"
+                            style="background-image: url('./images/review.png');"
+                            v-on:click="review(reservation.apartmentId)" type="button"></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <nav style="background-color: lavenderblush;">
+        <hr style='background:#c41088;height:4px;'>
+        <label class="label1">Canceled reservatins</label>
+        <hr style='background:#c41088;height:4px;'>
+    </nav>
+    <div>
+        <table class="myTable">
+            <thead>
+                <th v-on:click="sort('price')">
+                    reservations <img src='./images/arrow.webp' style="width: 14px; height: 14px;">
+                </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-bind:key='reservation.id' v-for='reservation in reservationsCanceled'>
+                    <td>
+                        Guest: {{reservation.guestId}}<br>
+                        ApartmentID: {{reservation.apartmentId}}<br>
+                        From: {{new Date(reservation.from)}}<br>
+                        To: {{new Date(reservation.to)}}<br>
+                        No. of nights: {{reservation.night}}<br>
+                        Price: {{reservation.price}}<br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>`,
     methods: {
+        sort(s) {
+            if (s === this.currentSort) {
+                this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+            }
+            this.currentSort = s;
+        },
         cancel(id) {
             this.status = 'canceled';
             Swal.fire({

@@ -25,14 +25,14 @@ public class UserDao {
 	String path=currentDir.toAbsolutePath().toString();
 	
 	public UserDao(String contextPath) {
-		read(contextPath);
+		read();
 	}
 	
 	    public List<User> getAll() {
 	        return users;
 	    }
 	    
-	    public void save(User user, String contextPath) {
+	    public void save(User user) {
 	    	
 	    	String s = user.getName() + "," +
 	    			user.getSurname() + "," +
@@ -64,7 +64,7 @@ public class UserDao {
 	        users.add(user);
 	    }
 	    
-	    public void read (String contextPath) {
+	    public void read () {
 			BufferedReader in = null;
 			try {
 				File file = new File(path + "/web-2020/WebRest/users.txt");

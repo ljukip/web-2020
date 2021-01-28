@@ -6,5 +6,8 @@
 12,12,5,tolstojeva,novi sad,21000
 12,12,6,tolstojeva,novi sad,21000
 12,12,7,tolstojeva 55,novi sad,21000
-
 12,12,8,tolstojeva 66,novi sad,21000
+
+44,44,9,batutova 16,novi sad,21000
+44,44,10,batutiva 44,novi sad,21000
+12,12,11,lll,lll,11000

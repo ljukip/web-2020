@@ -52,7 +52,7 @@ public class AmenityService {
 			AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
 
 			if (role.equals("ADMIN")) {
-				amenityDao.save(amenity, ctx.getRealPath(""));
+				amenityDao.save(amenity);
 				return Response.status(Response.Status.OK).entity(amenity).build();
 			}
 			return Response.status(Response.Status.FORBIDDEN).build();
