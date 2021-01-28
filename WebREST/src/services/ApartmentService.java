@@ -42,6 +42,7 @@ import dao.ApartmentDao;
 import dao.LocationDao;
 import dao.ReservationDao;
 import dao.ReviewDao;
+import dao.UserDao;
 
 @Path("/apartment")
 public class ApartmentService {
@@ -343,4 +344,112 @@ public class ApartmentService {
 		
 		return Response.status(Response.Status.CREATED).entity(apartment).build();
 	}
+	
+	 @GET
+		@Path("/search/{role}/{username}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response searchApartments(@Context HttpServletRequest request, @PathParam("role") String role, @PathParam("username") String username,
+				@QueryParam("location") String location,
+				@QueryParam("from") Long from,
+				@QueryParam("to") Long to,
+				@QueryParam("roomsMin") Long roomsMin,
+				@QueryParam("roomsMax") Long roomsMax,
+				@QueryParam("guests") Long guests,
+				@QueryParam("priceMin") Long priceMin,
+				@QueryParam("priceMax") Long priceMax) {
+
+		 
+	    	System.out.println("location: " + location);
+	    	System.out.println("from: " + from);
+	    	System.out.println("to: " + to);
+	    	System.out.println("roomsMin: " + roomsMin);
+	    	System.out.println("roomsMax: " + roomsMax);
+	    	System.out.println("guests: " + guests);
+	    	System.out.println("priceMin: " + priceMin);
+	    	System.out.println("priceMax: " + priceMax);
+
+			UserDao userDao = (UserDao) ctx.getAttribute("userDao");
+	    	ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");		
+			Collection<Apartment> apartments = apartmentDao.findAll();
+
+			if(role == null) {
+				apartments = apartments.stream()
+						.filter(a ->  a.getStatus().equals("active"))
+						.collect(Collectors.toList());
+			}
+			else if (role.equals("GUEST")) {
+				apartments = apartments.stream()
+						.filter(a ->  a.getStatus().equals("active"))
+						.collect(Collectors.toList());
+			}
+			
+			else if (role.equals("HOST")) {
+				
+				apartments = apartmentDao.findByHostUsername(username);
+				apartments = apartments.stream()
+						.filter(a ->  a.getStatus().equals("active"))
+						.collect(Collectors.toList());
+			}
+			else{
+				apartments = apartments;
+			}
+	 
+			if(location != null) {
+				apartments = apartments.stream()
+					.filter(l -> l.getLocation().getAdress().getCity().toLowerCase().contains(location.toLowerCase()))
+					.collect(Collectors.toList());
+			}
+			if(priceMin != null) {
+				apartments = apartments.stream()
+					.filter(a -> a.getPricePerNight() >= priceMin)
+					.collect(Collectors.toList());
+			}
+			if(priceMax != null) {
+				apartments = apartments.stream()
+					.filter(a -> a.getPricePerNight() <= priceMax)
+					.collect(Collectors.toList());
+			}
+			if(guests != null) {
+				apartments = apartments.stream()
+					.filter(a -> a.getCapacity() >= guests)
+					.collect(Collectors.toList());
+			}
+			if(roomsMin != null) {
+				apartments = apartments.stream()
+					.filter(a -> a.getRooms() >= roomsMin)
+					.collect(Collectors.toList());
+			}
+			if(roomsMax != null) {
+				apartments = apartments.stream()
+					.filter(a -> a.getRooms() <= roomsMax)
+					.collect(Collectors.toList());
+			}
+			if (from != null) {
+				apartments = apartments.stream()
+						.filter(a -> a.getTo() < from)
+						.collect(Collectors.toList());
+			}
+			if (to != null) {
+				apartments = apartments.stream()
+						.filter(a -> a.getFrom() > to)
+						.collect(Collectors.toList());
+			}
+			if (from != null && to != null) {
+				apartments = apartments.stream()
+						.filter(apartment -> {
+							Collection<Reservation> reservations = apartment.getReservations().stream()
+									.filter(r -> (r.getFrom() < from && r.getTo() > from
+												|| r.getFrom() > from && r.getTo() < to
+												|| r.getFrom() < to && r.getTo() > to
+											))
+									.collect(Collectors.toList());
+							return reservations.isEmpty();
+						})
+						.collect(Collectors.toList());
+			}
+
+			return Response.status(Response.Status.OK).entity(apartments).build();
+	    }
+
+	
 }
