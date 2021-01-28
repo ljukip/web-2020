@@ -10,6 +10,12 @@ public class Review {
 	private boolean published;
 	
 	
+	public Review() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public Review(String id,String guestId, String apartmentId, String review, int rating, boolean published) {
 		super();
 		this.guestId = guestId;

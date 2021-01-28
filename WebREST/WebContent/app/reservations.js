@@ -104,7 +104,7 @@ Vue.component("reservations", {
                                 No. of nights: {{reservation.night}}<br>
                                 Price: {{reservation.price}}<br>
                             </td>
-                            <td v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/review.png');" v-on:click= "review(reservation.id)" type="button"></button></td>
+                            <td v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/review.png');" v-on:click= "review(reservation.apartmentId)" type="button"></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -133,7 +133,7 @@ Vue.component("reservations", {
                                 No. of nights: {{reservation.night}}<br>
                                 Price: {{reservation.price}}<br>
                             </td>
-                            <td v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/review.png');" v-on:click= "review(reservationid)" type="button"></button></td>
+                            <td v-if="role==='GUEST'"><button class="buttonChoose" style="background-image: url('./images/review.png');" v-on:click= "review(reservation.apartmentId)" type="button"></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -196,6 +196,7 @@ Vue.component("reservations", {
             })
         },
         review(id) {
+            localStorage.setItem("reviewApartmentId", id);
             this.$router.push('/review');
             //axios  + appointment.id
 

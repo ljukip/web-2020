@@ -147,6 +147,8 @@ Vue.component("newReservation", {
                     this.disabledDates.ranges.push(available);
                 }
             }
+
+            localStorage.removeItem("reserveID");
         },
         calculate: function () {
             this.reservation.price = this.reservation.night * this.apartment.price;
@@ -171,7 +173,6 @@ Vue.component("newReservation", {
             this.$router.push('/login');
         }
         else {
-            localStorage.removeItem("reserveTrue");
             axios
                 .get('rest/apartment/' + this.apartmentId)
                 .then(Response => (this.load(Response.data)))

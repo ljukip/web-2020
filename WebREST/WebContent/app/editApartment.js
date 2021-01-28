@@ -372,7 +372,7 @@ Vue.component("editApartment", {
                 this.dates.from = new Date(response.data.to);
                 this.dates.to = new Date(response.data.from);
             })
-        localStorage.removeItem("editTrue");
+        localStorage.removeItem("editID");
     },
     mounted() {
 
