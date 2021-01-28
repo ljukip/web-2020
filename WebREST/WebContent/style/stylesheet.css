@@ -150,7 +150,6 @@ tr:hover {
 }
 
 #homepage {
-  background-color: #ffdff0;
   margin: 0;
   padding: 0;
   font: 15px 1.5em Arial, Helvetica, sans-serif;
@@ -176,7 +175,7 @@ tr:hover {
 
 /*Theme the header*/
 #example-table-theme .tabulator-header {
-  background-color: #c41088;
+  background-color: #c41088af;
   color: #fff;
 }
 
@@ -184,13 +183,13 @@ tr:hover {
 #example-table-theme .tabulator-header .tabulator-col,
 #example-table-theme .tabulator-header .tabulator-col-row-handle {
   white-space: normal;
-  background-color: #c41088;
+  background-color: #c41088bd;
 }
 
 /*Color the table rows*/
 #example-table-theme .tabulator-tableHolder .tabulator-table .tabulator-row {
-  color: #fff;
-  background-color: #e9c4d8;
+  color: #521d4b;
+  background-color: #e9c4d85d;
 }
 
 /*Color even rows*/
@@ -198,7 +197,7 @@ tr:hover {
   .tabulator-tableHolder
   .tabulator-table
   .tabulator-row:nth-child(even) {
-  background-color: #ffdff0;
+  background-color: #ffdff059;
 }
 #div-form {
   flex-direction: column;

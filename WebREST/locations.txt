@@ -13,3 +13,4 @@
 12,12,12,Neznanog i znanog heroja 7,Novi Sad,21000
 44012,21.5,13,strazilovska 5,novi sad,21000
 
+12,12,14,decanska 16,novi sad,21000

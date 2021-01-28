@@ -12,6 +12,13 @@ public class Adress {
 		this.city = city;
 		this.zip = zip;
 	}
+	
+
+	public Adress() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 
 	public String getStreetNum() {
 		return streetNum;

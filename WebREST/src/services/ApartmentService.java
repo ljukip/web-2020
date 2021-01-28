@@ -148,76 +148,9 @@ public class ApartmentService {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateApartment(@Context HttpServletRequest request, String type) {
-		
-		Apartment apartment= new Apartment();
-		//String username=apartment.getHost();
-		System.out.println("usao u update apartment primio:" + type );
-		String[] tokens1 = type.split("\\[");
-		for (int i=0;i<tokens1.length;i++) {
-			tokens1[i].trim();
-			System.out.println("tokeni1:"+ tokens1[i]);};
-			String[] a;
-			if (tokens1.length==2) {
-				a=tokens1[1].split("\\]");
-			}
-			else {
-				a=tokens1[2].split("\\]");
-			}
-			
-		
-			String delims = "[\\\":,{}]+";
-			String[] sID=a[1].split(delims);
-			String amenitiesString=a[0];
-		for (int i=0;i<sID.length;i++) {
-			System.out.println("tokeniA:"+ sID[i]);
-			if(sID[i].equals("id")) {
-				apartment.setId(sID[i+1]);
-			}
-			if(sID[i].equals("pricePerNight")) {
-				apartment.setPricePerNight(Integer.parseInt(sID[i+1]));
-			}
-		};
-		
-		
-		
-		String[] tokens = type.split(delims);
-		for (int i=0;i<tokens.length;i++) {
-			tokens[i].trim();
-			System.out.println("tokeni:"+ tokens[i]);};
-		
-		apartment.setType(Apartment.Type.valueOf(tokens[2]));
-		apartment.setCapacity(Integer.parseInt(tokens[4]));
-		apartment.setRooms(Integer.parseInt(tokens[6]));
-		Adress address=new Adress(tokens[14],tokens[16],tokens[18]);
-		Location location=new Location(tokens[9],tokens[11],address); //proveri da li lokacija postoji, ako ne, dodaj je
-		LocationDao locationDao = (LocationDao) ctx.getAttribute("locationDao");
-		location.setId(tokens[20]);
-		location.setId(locationDao.update(location, contextPath));
-		apartment.setLocation(location);
-		apartment.setCheckin(tokens[32]);
-		apartment.setCheckout(tokens[34]);
-		apartment.setStatus(tokens[36]);
-
-		System.out.println("amenity string:" + amenitiesString);
-		ArrayList<Amenity> amenities=new ArrayList<Amenity>();
-		AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
-		String[] names=amenitiesString.split("[\\\":,{}]+");
-		for(int i=0; i<names.length;i++) {
-			System.out.println("names:"+names[i]);
-			if(names[i].equals("id")) {
-				int b=i+1;
-				System.out.print("za upis:"+names[b]);
-				Amenity amenity=amenityDao.findAmenity(Integer.parseInt(names[b]));
-				 amenities.add(amenity);
-			}
-		}
-		apartment.setAmenities(amenities);
-		apartment.setTo(Long.parseLong(tokens[22]));
-		apartment.setFrom(Long.parseLong(tokens[24]));
-		apartment.setHost(tokens[26]);
-		
-		System.out.println("novi apartment: " + apartment.getLocation()+ apartment.getRooms() + apartment.getHost()+ apartment.getAmenities());
+	public Response updateApartment(@Context HttpServletRequest request, Apartment apartment) {
+	
+		System.out.println("novi apartment: " + apartment.getLocation()+ apartment.getRooms() + apartment.getHost()+ apartment.getAmenities() +apartment.getImages());
 		
 		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
 		Apartment newApartment = apartmentDao.update(apartment, ctx.getRealPath(""));
@@ -333,6 +266,7 @@ public class ApartmentService {
 	public Response forEditApartment(@Context HttpServletRequest request,  @PathParam("id") String id) {
 		
 		ApartmentDao apartmentDao = (ApartmentDao) ctx.getAttribute("apartmentDao");
+		AmenityDao amenityDao = (AmenityDao) ctx.getAttribute("amenityDao");
 		ReservationDao reservationDao = (ReservationDao) ctx.getAttribute("reservationDao");
 		System.out.println("id za eidt je:"+ id);
 		
@@ -341,7 +275,7 @@ public class ApartmentService {
 		apartment.setReservations(reservations);
 		//ucitati slike i review
 		apartment.setImages(apartmentDao.loadImages(ctx.getRealPath(""), id));
-		
+		apartment.setAmenities(amenityDao.findAllByApartmentId(ctx.getRealPath(""), id));
 		ReviewDao reviewDao = (ReviewDao) ctx.getAttribute("reviewDao");
 		Collection <Review> reviews = reviewDao.getApartments(id);
 		apartment.setReviews(reviews);

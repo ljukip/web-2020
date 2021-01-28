@@ -69,7 +69,7 @@ Vue.component("reservations", {
                             reservations <img src='./images/arrow.webp' style="width: 14px; height: 14px;">
                         </th>
                         </th>
-                        <th>Complete</th>
+                        <th v-if="role==='HOST'">Complete</th>
                         <th v-if="role==='GUEST'">Cancel</th>
                     </tr>
                 </thead>

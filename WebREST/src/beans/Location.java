@@ -7,6 +7,11 @@ public class Location {
 	private Adress adress;
 	private String id;
 	
+	
+	public Location() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public Location(String longitude, String latitude, Adress adress, String id) {
 		super();
 		this.longitude = longitude;

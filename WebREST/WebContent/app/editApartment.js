@@ -209,7 +209,16 @@ Vue.component("editApartment", {
         formatDate(dates) {
             return data.toLocaleDateString();
         },
-        uploadImage() { },
+        uploadImage() {
+            this.images = e.target.files;
+            let formData = new FormData();
+            for (let i = 0; i < this.images.length; i++) {
+                formData.append('image', this.images[i], this.images[i].name);
+            }
+            this.images = formData;
+
+            console.log("images:" + this.formData.image);
+        },
         cancel: function () {
             Swal.fire({
                 title: 'Are you sure you want to cancel changes?',
@@ -280,7 +289,7 @@ Vue.component("editApartment", {
 
                 console.log("sending:" + this.apartment + this.username);
                 axios
-                    .post('rest/apartment', apartment)
+                    .post('rest/apartment', this.apartment)
                     .then(Response => {
                         console.log(Response);
                         if (this.images != null) {
@@ -292,7 +301,7 @@ Vue.component("editApartment", {
                             }
 
                             axios
-                                .post('rest/apartment/' + Response.data.id + '/upload', this.images, contentType)
+                                .post('rest/apartment/' + this.apartment.id + '/upload', this.images, contentType)
                                 .then(response => {
                                     console.log(response);
                                     this.messages.successResponse = `<h4>Apartment was added successfully!</h4>`;
