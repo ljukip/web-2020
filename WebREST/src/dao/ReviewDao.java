@@ -6,12 +6,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import beans.Reservation;
 import beans.Review;
 
 public class ReviewDao {
@@ -24,6 +27,72 @@ public class ReviewDao {
 	public ReviewDao(String contextPath) {
 		read(contextPath);
 	}
+	
+	public List<Review> getAll() {
+        return reviews;
+    }
+	
+	public Review update(String contextPath, Review review) {
+		
+		 boolean match=false;
+	    	try {
+	    		File file = new File(path + "/web-2020/WebRest/reviews.txt");
+	    		File tempFile = new File(contextPath + "reviewTemp.txt");
+				BufferedReader in = new BufferedReader(new FileReader(file));
+				BufferedWriter writer =null;
+				writer = new BufferedWriter(new FileWriter(tempFile, true));
+				
+				String s = "", newS = "";
+				StringTokenizer st;
+				while ((s = in.readLine()) != null) {
+					//s = s.trim();
+					if (s.equals(""))
+						continue;
+					//uzimamo reci odvojene zarezom, trimujemo, proveravamo da li smo nasli trazeni username
+					String[] tokens = s.split(",");
+					String id= tokens[0];
+					System.out.println(id +"+++++++++++++++++++++++++" + review.getId());
+					if (review.getId().equals(id)) {
+						//update-ujemo
+						newS +=review.getId() + "," +
+				    			review.getApartmentId() + "," +
+				    			review.getGuestId() + "," +
+				    			review.getReview() + "," +
+				    			Integer.toString(review.getRating()) + "," +
+				    			String.valueOf(review.getPublished()) + "\r\n";
+								
+						match=true;
+					} else {
+						newS += s + "\r\n";
+					}
+				}
+			in.close();
+			//cuvamo promene
+			PrintWriter out = new PrintWriter(writer);
+			out.println(newS);
+			System.out.println("novi string:" + newS);
+			out.close();
+			Files.copy(tempFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	        tempFile.delete();
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	    	if (match==true) {
+	    		Review removeMe = null;
+		    	for (Review r : reviews) {
+		    	    if (review.getId().equals(r.getId())) {
+		    	    	removeMe=r;
+		    	    }
+		    	}
+		    	reviews.remove(removeMe);
+		    	reviews.add(review);
+		    	return review;
+	    	}
+	    	else
+	    		return null;
+	        
+		}
 	
 	
 	public void save(Review review, String contextPath) {

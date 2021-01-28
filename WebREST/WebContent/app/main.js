@@ -12,6 +12,7 @@ const Review = { template: "<review></review>" };
 const EditApartment = { template: "<editApartment></editApartment>" };
 const NewReservation = { template: "<newReservation></newReservation>" };
 const Reservations = { template: "<reservations></reservations>" }
+const Reviews = { template: "<reviews></reviews>" };
 
 const routes = [
   { path: "/", component: HomePage },
@@ -27,6 +28,7 @@ const routes = [
   { path: "/editApartment", component: EditApartment },
   { path: "/newReservation", component: NewReservation },
   { path: "/reservations", component: Reservations },
+  { path: "/reviews", component: Reviews },
 ];
 
 const router = new VueRouter({

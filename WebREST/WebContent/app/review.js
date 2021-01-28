@@ -54,7 +54,7 @@ Vue.component("review", {
                 timer: 1400
             })
             localStorage.removeItem("reviewApartmentId");
-            this.$router.push('/');
+            this.$router.push('/reviews');
         },
         failed() {
             Swal.fire({
