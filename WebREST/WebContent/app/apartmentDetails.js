@@ -206,10 +206,8 @@ Vue.component("apartmentDetails", {
             x[slideIndex - 1].style.display = "block";
         },
         getFirstImg: function () {
-            //provera da li ima slika za dati stan
             if (!this.apartment.images.length) {
                 img = ['./img/No_Image_Available.png'];
-                // ako nema smesti noimage sliku
                 this.apartment.images = img;
                 console.log("image:" + this.apartment.images[0])
             }
@@ -239,28 +237,20 @@ Vue.component("apartmentDetails", {
         noComment: function () {
             console.log('this.apartment.reviews.length: ' + this.apartment.reviews.length);
             if (this.apartment.reviews === undefined || this.apartment.reviews.length === 0) {
-                // console.log('this.apartment.reviews.length = 0 ');
                 this.noReview = true;
             }
             else if (this.apartment.reviews !== undefined || this.apartment.reviews.length !== 0) {
-                // console.log('this.apartment.reviews.length != 0 ');
                 let visible = false;
-                //ako ima komentara za dati stan, prolazimo kroz sve komentare 
-                //i proveravamo da li su odobreni ako ni jedan nije odobren opet prikazujemo poruku
                 for (let i = 0; i < this.apartment.reviews.length; i++) {
                     if (this.apartment.reviews[i].visible === false) {
-                        // console.log('review.visible: ' + this.apartment.reviews[i].visible);
                         continue;
                     }
                     else {
                         visible = true;
-                        // console.log('review.visible: ' + this.apartment.reviews[i].visible);
                         break;
 
                     }
                 }
-                //ako je visibilitu svakog komentara false onda 
-                //prikazuje poruku kako nema komentara
                 if (visible === false) {
                     this.noReview = true;
                 }
