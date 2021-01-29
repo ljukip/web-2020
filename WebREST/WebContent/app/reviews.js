@@ -27,7 +27,13 @@ Vue.component("reviews", {
                     </thead>
                     <tbody>
                         <tr v-bind:key='review.value' v-for='review in reviews'>
-                            <td>{{review.review}}</td>
+                            <td>{{review.review}}<br>
+                            <star-rating inactive-color="#e9c4d8"
+                            active-color="rgb(201, 28, 158)"
+                            glow:2 v-bind:read-only="true"
+                                v-bind:star-size="20" v-bind:show-rating="false" v-bind:rating="review.rating">
+                            </star-rating>
+                            <br>guest: {{review.guestId}}<br>apartment ID: {{review.apartmentId}}</td>
                             <td v-if="role==='HOST'">
                                 <button v-if="!review.published" class="buttonChoose" style="background-image: url('./images/publish.png');" v-on:click= "publish(review.id)" type="button"></button>
                                 <p v-if="review.published" class="buttonChoose" style="background-image: url('./images/cnc.png');" v-on:click= "unpublish(review.id)" type="button"></p>

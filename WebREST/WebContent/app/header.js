@@ -18,6 +18,7 @@ Vue.component("top-header", {
       <a href="#/reservations" v-if="user.role" data-toggle="tooltip" title="reservations"><img  src="images/res.png" width="31" height="31"> </a> 
       <a href="#/apartments" data-toggle="tooltip" title="apartments"><img  src="images/apa.png" width="31" height="31"> </a>
       <a href="#/listUsers" v-if="user.role ==='ADMIN'|| user.role=== 'HOST'" data-toggle="tooltip" title="users"><img  src="images/users.png" width="31" height="31"> </a>
+      <a href="#/reviews" v-if="user.role ==='ADMIN'|| user.role=== 'HOST'" data-toggle="tooltip" title="reviews"><img  src="images/revuew.webp" width="31" height="31"> </a>
       <p style='font-size:26px;float:left;font-family: cursive;color:#c41088;'><b>ROOMRY</b></p>
       <p style='font-size:26px;float:left;font-family:Brush Script MT;'>
       <br>apartments and rooms for rent</p>
