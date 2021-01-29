@@ -269,6 +269,10 @@ Vue.component("apartments", {
             // deleteApartment(id) {}
 
         },
+        reset() {
+            this.searchedQuery = '?';
+            window.location.reload();
+        },
         edit() {
 
 
