@@ -142,15 +142,6 @@ Vue.component("apartments", {
                 }
             }
 
-            //Ovo obrisati
-            console.log(`Trazite apartman:
-                location: ${this.searchedApartment.location}
-                roomsMin: ${this.searchedApartment.roomsMin}
-                roomsMax: ${this.searchedApartment.roomsMax}
-                guests: ${this.searchedApartment.guests}
-                priceMin: ${this.searchedApartment.priceMin}
-                priceMax: ${this.searchedApartment.priceMax}
-                `);
 
             axios
                 .get('rest/apartment/search/' + this.role + '/' + this.username + '/' + this.searchedQuery)
@@ -320,6 +311,13 @@ Vue.component("apartments", {
                                             window.location.reload();
                                         })
                                 }
+                            })
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'You are not authorized to change the status!',
                             })
                         }
                     }
